@@ -94,15 +94,6 @@ export default function Footer({ onCheckout }: { onCheckout: () => void }) {
         <div className="flex flex-col sm:flex-row items-center justify-between text-[11px] text-moon/40 gap-4 pt-4">
           <div className="flex items-center gap-1.5 font-medium">
             <span>&copy; {currentYear} Softnights. All rights respected.</span>
-            <span>&bull;</span>
-            <a
-              href="https://calmraising.com/products/calm-raising"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-gold transition-colors inline-flex items-center gap-0.5"
-            >
-              Original Calm Raising Style <ExternalLink className="w-2.5 h-2.5" />
-            </a>
           </div>
 
           <div className="flex items-center gap-1">
