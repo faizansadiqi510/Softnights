@@ -151,7 +151,7 @@ export default function WhatIsIncluded({ onOpenCheckout, images }: WhatIsInclude
         </div>
 
         {/* Pricing CTA */}
-        <div className="bg-white rounded-3xl p-6 md:p-8 border border-sage/12 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+        <div id="pricing-section" className="bg-white rounded-3xl p-6 md:p-8 border border-sage/12 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 scroll-mt-24">
           <div className="space-y-2 text-left">
             <div className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-gold/15 text-gold-dark text-xs font-semibold rounded-full">
               <Sparkles className="w-3 h-3 text-gold" />

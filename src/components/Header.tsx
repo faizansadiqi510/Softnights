@@ -52,7 +52,7 @@ export default function Header({ onCheckout }: HeaderProps) {
         {/* Purchase Trigger */}
         <div className="flex items-center gap-3">
           <button
-            onClick={onCheckout}
+            onClick={() => scrollToId("pricing-section")}
             className="bg-gold hover:bg-gold/90 text-white text-[10px] md:text-xs font-heading font-bold uppercase tracking-widest px-3.5 md:px-5 py-2 md:py-2.5 rounded-full shadow-md hover:scale-[1.02] active:scale-[0.98] transition-transform flex items-center gap-1.5 cursor-pointer"
           >
             <Moon className="w-3.5 h-3.5" />

@@ -102,6 +102,13 @@ export default function Hero({ onOpenCheckout, images }: HeroProps) {
     }
   };
 
+  const scrollToPricing = () => {
+    const el = document.getElementById("pricing-section");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <section className="relative overflow-hidden bg-cream pt-10 pb-16 px-6 md:py-24 border-b border-sage/10 text-center md:text-left" id="hero-section">
       
@@ -164,7 +171,7 @@ export default function Hero({ onOpenCheckout, images }: HeroProps) {
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md md:max-w-none pt-2">
               <button
-                onClick={onOpenCheckout}
+                onClick={scrollToPricing}
                 className="w-full sm:w-auto bg-gold hover:bg-gold/90 text-white font-heading font-bold py-4 px-7 rounded-2xl shadow-lg hover:scale-[1.01] active:scale-[0.99] transition-all duration-150 cursor-pointer uppercase tracking-wider text-xs flex items-center justify-center gap-2"
               >
                 <Moon className="w-4 h-4 fill-white text-transparent" />
