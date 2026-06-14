@@ -1,590 +1,1634 @@
 {% comment %}
-  SoftNights Complete Sleep Landing Page Section Template for Shopify
-  Add this file to your Shopify Theme under "sections/softnights-landing.liquid".
-  This section is 100% responsive, optimized for conversions, and includes an interactive sleep quiz + accordion.
+  SoftNights Sleep Solutions — Complete High-Converting Shopify Liquid Section
+  Custom built to be 100% compatible with modern Shopify Dawn theme & Vintage Shopify themes.
+  Includes a styled layout, custom color pickers, an interactive sleep quiz, custom testimonial blocks, and FAQs.
+  
+  HOW TO USE:
+  1. In your Shopify Theme editor, go to Edit Code -> Sections -> Add a new section called "softnights-landing".
+  2. Paste this entire content.
+  3. In customize visual theme, add the section to your landing page and configure your settings and products.
 {% endcomment %}
 
-{{ 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap' | stylesheet_tag }}
-
+<!-- SoftNights custom styling scoped strictly to this section -->
 <style>
-  /* Premium SoftNights Variables and Styling Override */
-  #shopify-section-{{ section.id }} .sn-wrapper {
-    --sn-cream: #FDFBF7;
-    --sn-charcoal: #2E3331;
-    --sn-sage: #6B8E7E;
-    --sn-sage-light: #F2F6F4;
-    --sn-gold: #D4A373;
-    --sn-blush: #E6A8A1;
-    --sn-warm-grey: #6E7471;
-    
-    background-color: var(--sn-cream);
-    color: var(--sn-charcoal);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    line-height: 1.6;
-    overflow-x: hidden;
+  #shopify-section-{{ section.id }} .softnights-wrapper {
+    --color-cream: {{ section.settings.color_cream | default: '#FAF7F2' }};
+    --color-sage: {{ section.settings.color_sage | default: '#5A6E63' }};
+    --color-sage-light: {{ section.settings.color_sage_light | default: '#FAF7F2' }};
+    --color-charcoal: {{ section.settings.color_charcoal | default: '#2D3430' }};
+    --color-gold: {{ section.settings.color_gold | default: '#D99E6C' }};
+    --color-blush: {{ section.settings.color_blush | default: '#BA6B57' }};
+    --color-warm-grey: {{ section.settings.color_warm_grey | default: '#606D66' }};
+
+    background-color: var(--color-cream);
+    color: var(--color-charcoal);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    padding: 0;
+    margin: 0;
   }
 
-  #shopify-section-{{ section.id }} .sn-serif {
-    font-family: 'Playfair Display', Georgia, serif;
-  }
-
-  /* Utility Classes in case Tailwind is not present in customer's theme */
+  /* Structural Containers */
   #shopify-section-{{ section.id }} .sn-container {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 20px;
+    box-sizing: border-box;
   }
 
-  #shopify-section-{{ section.id }} .btn-gold {
-    background-color: var(--sn-gold);
-    color: white;
+  /* Typography */
+  #shopify-section-{{ section.id }} .sn-font-heading {
+    font-family: Georgia, serif;
     font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    transition: all 0.2s ease-in-out;
+    line-height: 1.2;
+    color: var(--color-charcoal);
   }
 
-  #shopify-section-{{ section.id }} .btn-gold:hover {
-    background-color: #c59363;
-    transform: translateY(-2px);
+  #shopify-section-{{ section.id }} .sn-font-mono {
+    font-family: Menlo, Monaco, Consolas, "Liberation Mono", Courier, monospace;
   }
 
-  /* Quiz Interaction */
-  #shopify-section-{{ section.id }} .quiz-option {
-    background-color: rgba(242, 246, 244, 0.5);
-    border: 1px solid rgba(107, 142, 126, 0.15);
-    transition: all 0.2s ease;
-    cursor: pointer;
-    border-radius: 16px;
-    padding: 16px;
-    margin-bottom: 12px;
-    text-align: left;
-    width: 100%;
-    display: block;
-  }
+  /* Utility Styles */
+  #shopify-section-{{ section.id }} .text-xs { font-size: 12px; }
+  #shopify-section-{{ section.id }} .text-sm { font-size: 13px; }
+  #shopify-section-{{ section.id }} .text-base { font-size: 15px; }
+  #shopify-section-{{ section.id }} .text-lg { font-size: 18px; }
+  #shopify-section-{{ section.id }} .font-semibold { font-weight: 600; }
+  #shopify-section-{{ section.id }} .font-bold { font-weight: 700; }
+  #shopify-section-{{ section.id }} .uppercase { text-transform: uppercase; }
+  #shopify-section-{{ section.id }} .tracking-wider { letter-spacing: 0.05em; }
+  #shopify-section-{{ section.id }} .tracking-widest { letter-spacing: 0.12em; }
   
-  #shopify-section-{{ section.id }} .quiz-option:hover {
-    background-color: #F2F6F4;
-    border-color: var(--sn-sage);
-    transform: translateX(4px);
+  #shopify-section-{{ section.id }} .btn-primary {
+    background-color: var(--color-gold);
+    color: #ffffff !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 14px 28px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.2s, background-color 0.2s;
+    box-shadow: 0 10px 20px rgba(217, 158, 108, 0.15);
   }
 
-  /* FAQ Accordion */
-  #shopify-section-{{ section.id }} .faq-item {
-    border-bottom: 1px solid rgba(107, 142, 126, 0.1);
-    padding: 16px 0;
+  #shopify-section-{{ section.id }} .btn-primary:hover {
+    background-color: #cb8f5d;
+    transform: translateY(-1px);
   }
 
-  #shopify-section-{{ section.id }} .faq-trigger {
-    width: 100%;
+  #shopify-section-{{ section.id }} .btn-secondary {
+    background-color: transparent;
+    color: var(--color-sage) !important;
+    font-weight: 700;
+    padding: 13px 26px;
+    border-radius: 12px;
+    border: 1.5px solid var(--color-sage);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  #shopify-section-{{ section.id }} .btn-secondary:hover {
+    background-color: rgba(90, 110, 99, 0.05);
+  }
+
+  #shopify-section-{{ section.id }} .announcement-banner {
+    background-color: var(--color-sage);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    padding: 8px 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* Header styles */
+  #shopify-section-{{ section.id }} .softnights-header {
+    background-color: rgba(250, 247, 242, 0.96);
+    border-bottom: 1px solid rgba(90, 110, 99, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 14px 0;
+    backdrop-filter: blur(8px);
+  }
+
+  #shopify-section-{{ section.id }} .header-flex {
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  #shopify-section-{{ section.id }} .logo-text {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--color-sage);
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  #shopify-section-{{ section.id }} .logo-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--color-gold);
+    display: inline-block;
+  }
+
+  /* Hero Elements */
+  #shopify-section-{{ section.id }} .hero-section {
+    padding: 50px 0 80px 0;
+  }
+
+  #shopify-section-{{ section.id }} .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 50px;
+    align-items: center;
+  }
+
+  #shopify-section-{{ section.id }} .hero-tag {
+    background-color: rgba(90, 110, 99, 0.08);
+    color: var(--color-sage);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  #shopify-section-{{ section.id }} .hero-stars {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 20px;
+  }
+
+  #shopify-section-{{ section.id }} .star-icon {
+    width: 14px;
+    height: 14px;
+    fill: var(--color-gold);
+  }
+
+  #shopify-section-{{ section.id }} .hero-title {
+    font-size: 38px;
+    margin: 0 0 16px 0;
+    color: var(--color-charcoal);
+  }
+
+  #shopify-section-{{ section.id }} .hero-subtitle {
+    font-size: 16px;
+    color: var(--color-warm-grey);
+    margin: 0 0 28px 0;
+    line-height: 1.6;
+  }
+
+  #shopify-section-{{ section.id }} .hero-bullets {
+    margin-bottom: 30px;
+    padding-left: 0;
+    list-style: none;
+  }
+
+  #shopify-section-{{ section.id }} .hero-bullet-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    margin-bottom: 12px;
+    color: var(--color-charcoal);
+  }
+
+  #shopify-section-{{ section.id }} .hero-bullet-check {
+    color: var(--color-sage);
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  #shopify-section-{{ section.id }} .hero-cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 24px;
+  }
+
+  #shopify-section-{{ section.id }} .countdown-box {
+    background-color: rgba(186, 107, 87, 0.05);
+    border: 1px dashed rgba(186, 107, 87, 0.3);
+    padding: 12px 20px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 380px;
+    box-sizing: border-box;
+  }
+
+  #shopify-section-{{ section.id }} .countdown-text {
+    font-size: 11px;
+    color: var(--color-blush);
+    font-weight: bold;
+    letter-spacing: 0.05em;
+  }
+
+  #shopify-section-{{ section.id }} .countdown-timer {
+    color: var(--color-blush);
+    font-weight: 700;
+  }
+
+  /* Mockup Visualizer */
+  #shopify-section-{{ section.id }} .books-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 40px 0;
+  }
+
+  #shopify-section-{{ section.id }} .book-mockup {
+    width: 170px;
+    height: 230px;
+    border-radius: 12px;
+    box-shadow: 15px 20px 40px rgba(0,0,0,0.12);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  }
+
+  #shopify-section-{{ section.id }} .book-mockup-main {
+    background-color: var(--color-sage);
+    color: #ffffff;
+    z-index: 2;
+    transform: rotate(-2deg);
+  }
+
+  #shopify-section-{{ section.id }} .book-mockup-bonus {
+    background-color: #2D3430;
+    color: #ffffff;
+    margin-left: -50px;
+    transform: rotate(5deg) translateY(20px);
+    z-index: 1;
+  }
+
+  #shopify-section-{{ section.id }} .book-mockup:hover {
+    transform: scale(1.04) translateY(-5px);
+    z-index: 10;
+  }
+
+  #shopify-section-{{ section.id }} .book-spine-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 8px;
+    background: linear-gradient(to right, rgba(255,255,255,0.15), transparent);
+    border-right: 1px solid rgba(0,0,0,0.1);
+  }
+
+  #shopify-section-{{ section.id }} .book-inner {
+    padding: 24px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+  }
+
+  #shopify-section-{{ section.id }} .book-label {
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 700;
+    opacity: 0.8;
+  }
+
+  #shopify-section-{{ section.id }} .book-title {
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 8px;
+    line-height: 1.3;
+  }
+
+  #shopify-section-{{ section.id }} .book-footer {
+    font-size: 8px;
+    opacity: 0.6;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  /* Relatable Realities - Pain section */
+  #shopify-section-{{ section.id }} .reality-section {
+    background-color: rgba(90, 110, 99, 0.03);
+    padding: 80px 0;
+    border-top: 1px solid rgba(90, 110, 99, 0.05);
+    border-bottom: 1px solid rgba(90, 110, 99, 0.05);
+  }
+
+  #shopify-section-{{ section.id }} .section-header {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 50px auto;
+  }
+
+  #shopify-section-{{ section.id }} .section-subtitle {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-sage);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  #shopify-section-{{ section.id }} .section-title {
+    font-size: 28px;
+    margin: 0 0 12px 0;
+  }
+
+  #shopify-section-{{ section.id }} .section-desc {
+    color: var(--color-warm-grey);
+    font-size: 14px;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  #shopify-section-{{ section.id }} .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+
+  #shopify-section-{{ section.id }} .comparison-card {
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 35px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+    border: 1px solid rgba(90, 110, 99, 0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  #shopify-section-{{ section.id }} .card-icon-box {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+
+  #shopify-section-{{ section.id }} .card-icon-box-blush {
+    background-color: rgba(186, 107, 87, 0.1);
+    color: var(--color-blush);
+  }
+
+  #shopify-section-{{ section.id }} .card-icon-box-sage {
+    background-color: rgba(90, 110, 99, 0.1);
+    color: var(--color-sage);
+  }
+
+  #shopify-section-{{ section.id }} .card-title {
+    font-size: 18px;
+    margin: 0 0 16px 0;
+  }
+
+  #shopify-section-{{ section.id }} .card-bullets {
+    padding-left: 0;
+    list-style: none;
+    margin: 0 0 30px 0;
+  }
+
+  #shopify-section-{{ section.id }} .card-bullet-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+    margin-bottom: 12px;
+    line-height: 1.4;
+    color: var(--color-warm-grey);
+  }
+
+  #shopify-section-{{ section.id }} .card-bullet-cross {
+    color: var(--color-blush);
+    font-weight: bold;
+  }
+
+  #shopify-section-{{ section.id }} .card-bullet-tick {
+    color: var(--color-sage);
+    font-weight: bold;
+  }
+
+  #shopify-section-{{ section.id }} .card-quote {
+    border-t: 1px solid rgba(90, 110, 99, 0.08);
+    padding-top: 16px;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--color-sage);
+  }
+
+  /* Diagnostic quiz assessment */
+  #shopify-section-{{ section.id }} .quiz-section {
+    padding: 80px 0;
+    position: relative;
+  }
+
+  #shopify-section-{{ section.id }} .quiz-box {
+    background-color: #ffffff;
+    border-radius: 24px;
+    padding: 40px;
+    box-sizing: border-box;
+    max-width: 650px;
+    margin: 0 auto;
+    border: 1px solid rgba(90, 110, 99, 0.1);
+    box-shadow: 0 15px 40px rgba(90, 110, 99, 0.05);
+  }
+
+  #shopify-section-{{ section.id }} .quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(90, 110, 99, 0.08);
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+  }
+
+  #shopify-section-{{ section.id }} .quiz-step-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: var(--color-sage);
+    letter-spacing: 0.05em;
+  }
+
+  #shopify-section-{{ section.id }} .quiz-progress-track {
+    width: 100px;
+    height: 5px;
+    background-color: rgba(90, 110, 99, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  #shopify-section-{{ section.id }} .quiz-progress-bar {
+    height: 100%;
+    background-color: var(--color-sage);
+    width: 33.3%;
+    transition: width 0.3s ease;
+  }
+
+  #shopify-section-{{ section.id }} .quiz-question {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    color: var(--color-charcoal);
+  }
+
+  #shopify-section-{{ section.id }} .quiz-option {
+    width: 100%;
+    background-color: rgba(250, 247, 242, 0.5);
+    border: 1px solid rgba(90, 110, 99, 0.12);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    text-align: left;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: background-color 0.2s, border-color 0.2s, transform 0.2s;
+  }
+
+  #shopify-section-{{ section.id }} .quiz-option:hover {
+    background-color: rgba(94, 114, 103, 0.06);
+    border-color: var(--color-sage);
+    transform: translateX(2px);
+  }
+
+  #shopify-section-{{ section.id }} .quiz-option-label {
+    font-weight: bold;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 2px;
+    color: var(--color-charcoal);
+  }
+
+  #shopify-section-{{ section.id }} .quiz-option-desc {
+    font-size: 11px;
+    color: var(--color-warm-grey);
+    display: block;
+  }
+
+  /* Quiz results layout */
+  #shopify-section-{{ section.id }} .quiz-results {
+    display: none;
+  }
+
+  #shopify-section-{{ section.id }} .result-panel {
+    background-color: rgba(90, 110, 99, 0.04);
+    border: 1px solid rgba(90, 110, 99, 0.1);
+    border-radius: 16px;
+    padding: 30px;
+    box-sizing: border-box;
+    margin-bottom: 24px;
+  }
+
+  #shopify-section-{{ section.id }} .result-tag {
+    color: var(--color-blush);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  #shopify-section-{{ section.id }} .result-title {
+    font-size: 22px;
+    margin: 0 0 12px 0;
+  }
+
+  #shopify-section-{{ section.id }} .result-body {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-warm-grey);
+    margin: 0 0 20px 0;
+  }
+
+  #shopify-section-{{ section.id }} .reco-box {
+    background-color: #ffffff;
+    border-left: 3.5px solid var(--color-sage);
+    padding: 16px;
+    border-radius: 4px 12px 12px 4px;
+    font-size: 13px;
+    color: var(--color-charcoal);
+  }
+
+  #shopify-section-{{ section.id }} .reco-box-title {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 4px;
+    color: var(--color-sage);
+  }
+
+  #shopify-section-{{ section.id }} .btn-quiz-cta {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  #shopify-section-{{ section.id }} .btn-quiz-reset {
     background: none;
     border: none;
+    color: var(--color-warm-grey);
+    font-size: 11px;
     cursor: pointer;
+    text-decoration: underline;
+    display: block;
+    margin: 16px auto 0 auto;
     font-weight: 600;
+  }
+
+  /* Testimonials Area */
+  #shopify-section-{{ section.id }} .testimonials-section {
+    background-color: rgba(90, 110, 99, 0.03);
+    padding: 80px 0;
+  }
+
+  #shopify-section-{{ section.id }} .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+  }
+
+  #shopify-section-{{ section.id }} .testimonial-card {
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 30px;
+    box-sizing: border-box;
+    border: 1px solid rgba(90, 110, 99, 0.06);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.01);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  #shopify-section-{{ section.id }} .stars-row {
+    margin-bottom: 12px;
+  }
+
+  #shopify-section-{{ section.id }} .star-yellow {
+    color: var(--color-gold);
+    font-size: 14px;
+  }
+
+  #shopify-section-{{ section.id }} .testimonial-body {
+    font-size: 13px;
+    font-style: italic;
+    color: var(--color-warm-grey);
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  #shopify-section-{{ section.id }} .testimonial-highlight {
+    font-size: 13px;
+    font-weight: bold;
+    color: var(--color-sage);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  #shopify-section-{{ section.id }} .reviewer-info {
+    border-top: 1px solid rgba(90, 110, 99, 0.08);
+    padding-top: 14px;
+  }
+
+  #shopify-section-{{ section.id }} .reviewer-name {
+    font-weight: bold;
+    font-size: 13px;
+    color: var(--color-charcoal);
+  }
+
+  #shopify-section-{{ section.id }} .reviewer-detail {
+    font-size: 11px;
+    color: var(--color-warm-grey);
+    font-weight: 500;
+  }
+
+  /* collapsible FAQ Accordion */
+  #shopify-section-{{ section.id }} .faq-section {
+    padding: 80px 0;
+  }
+
+  #shopify-section-{{ section.id }} .faq-item {
+    background-color: #ffffff;
+    border-radius: 12px;
+    border: 1px solid rgba(90, 110, 99, 0.08);
+    margin-bottom: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+  }
+
+  #shopify-section-{{ section.id }} .faq-button {
+    width: 100%;
+    background-color: #ffffff;
+    border: none;
+    padding: 18px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     text-align: left;
-    color: var(--sn-charcoal);
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    color: var(--color-charcoal);
+    box-sizing: border-box;
+    transition: background-color 0.2s;
+  }
+
+  #shopify-section-{{ section.id }} .faq-button:hover {
+    background-color: rgba(90, 110, 99, 0.02);
   }
 
   #shopify-section-{{ section.id }} .faq-content {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease-out;
-    color: var(--sn-warm-grey);
-    font-size: 14px;
-    margin-top: 0;
+    transition: all 0.3s ease-in-out;
   }
 
-  #shopify-section-{{ section.id }} .faq-item.active .faq-content {
-    max-height: 200px;
-    margin-top: 8px;
+  #shopify-section-{{ section.id }} .faq-inner-body {
+    padding: 20px 24px;
+    border-top: 1px solid rgba(90, 110, 99, 0.06);
+    font-size: 13px;
+    color: var(--color-warm-grey);
+    line-height: 1.6;
+    background-color: rgba(250, 247, 242, 0.3);
   }
 
   #shopify-section-{{ section.id }} .faq-icon {
-    transition: transform 0.3s ease;
+    font-size: 12px;
+    transition: transform 0.3s;
+    color: var(--color-warm-grey);
   }
 
   #shopify-section-{{ section.id }} .faq-item.active .faq-icon {
     transform: rotate(180deg);
   }
 
-  /* Book Shadow & Spine */
-  #shopify-section-{{ section.id }} .book-cover {
+  /* Closing Banner */
+  #shopify-section-{{ section.id }} .closing-section {
+    padding: 100px 0;
+    text-align: center;
+    border-top: 1px solid rgba(90, 110, 99, 0.1);
     position: relative;
-    box-shadow: 20px 20px 60px rgba(0,0,0,0.15);
-    border-radius: 12px;
     overflow: hidden;
-    transition: transform 0.3s ease;
   }
-  #shopify-section-{{ section.id }} .book-cover:hover {
-    transform: scale(1.02) rotate(1deg);
-  }
-  #shopify-section-{{ section.id }} .book-spine {
+
+  #shopify-section-{{ section.id }} .closing-bg-blob {
     position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 8px;
-    background: linear-gradient(to right, rgba(255,255,255,0.2), transparent);
+    top: 50%;
+    left: 50%;
+    width: 450px;
+    height: 450px;
+    background-color: rgba(90, 110, 99, 0.04);
+    border-radius: 50%;
+    filter: blur(80px);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  #shopify-section-{{ section.id }} .closing-content {
+    position: relative;
     z-index: 2;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    #shopify-section-{{ section.id }} .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      text-align: center;
+    }
+
+    #shopify-section-{{ section.id }} .hero-bullets {
+      display: inline-block;
+      text-align: left;
+    }
+
+    #shopify-section-{{ section.id }} .hero-cta-group {
+      justify-content: center;
+    }
+
+    #shopify-section-{{ section.id }} .comparison-grid {
+      grid-template-columns: 1fr;
+    }
+
+    #shopify-section-{{ section.id }} .books-wrapper {
+      padding-bottom: 20px;
+    }
+
+    #shopify-section-{{ section.id }} .hero-title {
+      font-size: 32px;
+    }
+
+    #shopify-section-{{ section.id }} .quiz-box {
+      padding: 24px;
+    }
+
+    #shopify-section-{{ section.id }} .section-title {
+      font-size: 24px;
+    }
   }
 </style>
 
-<div class="sn-wrapper">
-  {%- if section.settings.show_announcement -%}
-    <div style="background-color: var(--sn-sage); color: white; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; text-align: center; padding: 8px 16px;" class="uppercase flex items-center justify-center gap-2 select-none shrink-0 text-center">
-      <span>✨ {{ section.settings.announcement_text }}</span>
+<div class="softnights-wrapper">
+  
+  <!-- Announcement Reassurance Banner -->
+  {% if section.settings.show_announcement %}
+    <div class="announcement-banner">
+      {{ section.settings.announcement_text }}
     </div>
-  {%- endif -%}
+  {% endif %}
 
-  <!-- Sticky Header -->
-  <header style="background-color: rgba(253, 251, 247, 0.95); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(107, 142, 126, 0.15); position: sticky; top: 0; z-index: 50; padding: 12px 0;">
-    <div class="sn-container" style="display: flex; justify-content: space-between; align-items: center;">
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <!-- Logo -->
-        <span class="sn-serif" style="font-size: 20px; font-weight: 700; color: var(--sn-sage); tracking-tight: -0.05em;">SoftNights</span>
+  <!-- Main Sticky Header -->
+  <header class="softnights-header">
+    <div class="sn-container header-flex">
+      <div class="logo-text">
+        <span>SoftNights</span>
+        <span class="logo-dot"></span>
       </div>
-      <a href="#purchase-section" class="btn-gold" style="padding: 8px 20px; border-radius: 9999px; text-decoration: none; font-size: 12px; font-weight: bold; letter-spacing: 0.05em; display: inline-block;">
-        {{ section.settings.header_cta_text }}
-      </a>
+      <div>
+        <a href="#shopify-purchase-box-{{ section.id }}" class="btn-primary text-xs" style="padding: 10px 20px; border-radius: 8px;">
+          {{ section.settings.header_cta_text | default: 'Order Rest' }}
+        </a>
+      </div>
     </div>
   </header>
 
-  <!-- Hero Banner -->
-  <section class="sn-container" style="padding: 60px 24px; text-align: center;">
-    <div style="max-width: 800px; margin: 0 auto;">
-      <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--sn-sage); background: rgba(107, 142, 126, 0.1); padding: 4px 12px; border-radius: 99px;">
-        {{ section.settings.hero_badge }}
-      </span>
-      <h1 class="sn-serif" style="font-size: 42px; line-height: 1.15; font-weight: 700; color: var(--sn-charcoal); margin-top: 16px; margin-bottom: 16px;">
-        {{ section.settings.hero_title }}
-      </h1>
-      <p style="font-size: 16px; color: var(--sn-warm-grey); max-w: 600px; margin: 0 auto 24px auto;">
-        {{ section.settings.hero_subtitle }}
-      </p>
+  <!-- Hero block -->
+  <section class="hero-section">
+    <div class="sn-container hero-grid">
+      
+      <!-- Copy info -->
+      <div>
+        <span class="hero-tag">{{ section.settings.trust_badge_text | default: 'GENTLE BIOLOGICAL STUDY' }}</span>
+        
+        <div class="hero-stars">
+          {% for i in (1..5) %}
+            <svg class="star-icon" viewBox="0 0 20 20">
+              <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+            </svg>
+          {% endfor %}
+          <span class="text-xs font-semibold" style="color: var(--color-warm-grey); margin-left: 6px;">4.9/5 Trust Score</span>
+        </div>
 
-      <!-- Images Grid -->
-      <div style="display: flex; justify-content: center; gap: 24px; margin-top: 40px; margin-bottom: 40px; flex-wrap: wrap;">
+        <h1 class="sn-font-heading hero-title">
+          {{ section.settings.hero_heading | default: 'Your Child Can Sleep. And So Can You.' }}
+        </h1>
+
+        <p class="hero-subtitle">
+          {{ section.settings.hero_subheading | default: 'No traumatic rules or separation. A gentle, biologically-aligned routine tailored to your family dynamic.' }}
+        </p>
+
+        <!-- Bullet Highlights -->
+        <ul class="hero-bullets">
+          <li class="hero-bullet-item">
+            <span class="hero-bullet-check">✓</span>
+            <span>100% responsive, loving guidance — <strong>absolutely zero raw crying out.</strong></span>
+          </li>
+          <li class="hero-bullet-item">
+            <span class="hero-bullet-check">✓</span>
+            <span>Instantly optimizes awake intervals to stop bedtime struggles.</span>
+          </li>
+        </ul>
+
+        <!-- CTA blocks and timer -->
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div class="hero-cta-group">
+            <a href="#shopify-purchase-box-{{ section.id }}" class="btn-primary">
+              <span>Secure Rest — {{ section.settings.product_price | default: '₹299' }}</span>
+            </a>
+            <a href="#softnights-quiz-anchor-{{ section.id }}" class="btn-secondary">
+              <span>Diagnostic Assessment</span>
+            </a>
+          </div>
+
+          <!-- Countdown indicator -->
+          <div class="countdown-box">
+            <span class="countdown-text uppercase">★ LIMITED RESTORATIVE OFFER</span>
+            <span id="counter-clock-{{ section.id }}" class="countdown-timer sn-font-mono text-xs">14m 58s</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Book Visualizers mockup graphics -->
+      <div class="books-wrapper">
         <!-- Main Book -->
-        <div class="book-cover" style="width: 180px; height: 240px; background-color: var(--sn-sage-light); border: 1px solid rgba(0,0,0,0.05);">
-          <div class="book-spine"></div>
-          {%- if section.settings.cover_main_image != blank -%}
-            <img src="{{ section.settings.cover_main_image | image_url: width: 360 }}" alt="Main Guide" style="width:100%; height:100%; object-fit: cover;">
-          {%- else -%}
-            <div style="padding: 24px; height: 100%; display: flex; flex-col; justify-content: space-between; text-align: left;">
-              <span style="font-size: 8px; font-weight: 700; color: var(--sn-sage); text-transform: uppercase;">Sleep Solutions</span>
-              <span class="sn-serif" style="font-size: 14px; font-weight: bold;">Your Child Can Sleep Book</span>
-              <span style="font-size: 8px; color: var(--sn-warm-grey);">SoftNights Press</span>
+        <div class="book-mockup book-mockup-main">
+          <div class="book-spine-line"></div>
+          <div class="book-inner">
+            <span class="book-label">CORE SOLUTIONS</span>
+            <div>
+              <h3 class="sn-font-heading book-title">SoftNights Sleep Solutions</h3>
+              <div style="width: 25px; height: 2px; background-color: var(--color-gold); margin-top: 8px;"></div>
             </div>
-          {%- endif -%}
+            <p class="text-xs" style="opacity: 0.8; margin: 0; line-height: 1.3;">Scientific awake windows adjusted perfectly.</p>
+            <span class="book-footer">SoftNights Press</span>
+          </div>
         </div>
 
         <!-- Bonus Book -->
-        <div class="book-cover" style="width: 180px; height: 240px; background-color: #FAF4F2; border: 1px solid rgba(0,0,0,0.05);">
-          <div class="book-spine"></div>
-          {%- if section.settings.cover_bonus_image != blank -%}
-            <img src="{{ section.settings.cover_bonus_image | image_url: width: 360 }}" alt="Bonus Guide" style="width:100%; height:100%; object-fit: cover;">
-          {%- else -%}
-            <div style="padding: 24px; height: 100%; display: flex; flex-col; justify-content: space-between; text-align: left;">
-              <span style="font-size: 8px; font-weight: 700; color: var(--sn-blush); text-transform: uppercase;">Bonus Book</span>
-              <span class="sn-serif" style="font-size: 14px; font-weight: bold;">The Night Waking Fix</span>
-              <span style="font-size: 8px; color: var(--sn-warm-grey);">SoftNights Press</span>
+        <div class="book-mockup book-mockup-bonus">
+          <div class="book-spine-line"></div>
+          <div class="book-inner">
+            <span class="book-label" style="color: var(--color-gold);">FREE BONUS</span>
+            <div>
+              <h3 class="sn-font-heading book-title" style="font-size: 13px;">The Night Waking Fix</h3>
+              <div style="width: 20px; height: 1.5px; background-color: #ffffff; margin-top: 6px; opacity: 0.3;"></div>
             </div>
-          {%- endif -%}
+            <p style="font-size: 10px; opacity: 0.7; margin: 0; line-height: 1.3;">Our signature 2:00 AM resettlement plan.</p>
+            <span class="book-footer" style="opacity: 0.4;">Fast Action guide</span>
+          </div>
         </div>
       </div>
 
-      <a href="#purchase-section" class="btn-gold" style="padding: 16px 40px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: bold; letter-spacing: 0.05em; display: inline-block; box-shadow: 0 10px 20px rgba(212,163,115,0.2);">
-        {{ section.settings.cta_text }} — {{ section.settings.price_display }}
-      </a>
+    </div>
+  </section>
 
-      <!-- Value Props -->
-      <div style="display: flex; justify-content: center; gap: 16px; margin-top: 16px; font-size: 11px; color: var(--sn-warm-grey);">
-        <span>✓ 14-Day Money Back Guarantee</span>
-        <span>&bull;</span>
-        <span>✓ Instant ZIP/PDF Download</span>
+  <!-- Relatable Realities Section -->
+  <section class="reality-section">
+    <div class="sn-container">
+      <div class="section-header">
+        <span class="section-subtitle">RELATABLE REALITY</span>
+        <h2 class="sn-font-heading section-title">Is bedtime an exhausting, endless fight?</h2>
+        <p class="section-desc">You measure the hours in sigh-filled delays. By the time they finally rest, you are too depleted to relax or reclaim your evening.</p>
+      </div>
+
+      <div class="comparison-grid">
+        
+        <!-- Vicious Bedtime Loop -->
+        <div class="comparison-card">
+          <div>
+            <div class="card-icon-box card-icon-box-blush">
+              ✕
+            </div>
+            <h3 class="sn-font-heading card-title" style="font-size: 18px;">The Bedtime Battle Loop</h3>
+            <ul class="card-bullets">
+              <li class="card-bullet-item">
+                <span class="card-bullet-cross">✕</span>
+                <span><strong>The 2-Hour Stall:</strong> Endless negotiations, demands for cups of water, and 'one more kiss' delays.</span>
+              </li>
+              <li class="card-bullet-item">
+                <span class="card-bullet-cross">✕</span>
+                <span><strong>Hourly Wakings:</strong> Bouncing, rocking, or feeding back to sleep 4+ times a night.</span>
+              </li>
+              <li class="card-bullet-item">
+                <span class="card-bullet-cross">✕</span>
+                <span><strong>Waking Up Defeated:</strong> Starting your days at 5:00 AM completely drained and emotionally raw.</span>
+              </li>
+            </ul>
+          </div>
+          <div class="card-quote">
+            “I was sitting on the nursery floor at 3:00 AM sobbing, wondering why my baby wouldn't just close his eyes.”
+          </div>
+        </div>
+
+        <!-- Soothing Sleep Flow -->
+        <div class="comparison-card">
+          <div>
+            <div class="card-icon-box card-icon-box-sage">
+              ✓
+            </div>
+            <h3 class="sn-font-heading card-title" style="font-size: 18px;">The Soothing Sleep Flow</h3>
+            <ul class="card-bullets">
+              <li class="card-bullet-item">
+                <span class="card-bullet-tick">✓</span>
+                <span><strong>Peaceful 15-Min Drifting:</strong> Your child enters their natural sleep window relaxed and ready.</span>
+              </li>
+              <li class="card-bullet-item">
+                <span class="card-bullet-tick">✓</span>
+                <span><strong>Uninterrupted Rest:</strong> Sleeping through multiple transitions with gentle, built-in self-soothing skills.</span>
+              </li>
+              <li class="card-bullet-item">
+                <span class="card-bullet-tick">✓</span>
+                <span><strong>Waking Up Joyful:</strong> Greeted at 7:00 AM by a laughing, alert child who got the rest they need.</span>
+              </li>
+            </ul>
+          </div>
+          <div class="card-quote" style="color: var(--color-sage);">
+            “We put him down awake, kissed him goodnight, and walked out. Under 10 minutes later he was sleeping peacefully.”
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <!-- Interactive Sleep Diagnostic Quiz Section -->
-  <section style="background-color: var(--sn-sage-light); padding: 60px 24px;">
-    <div class="sn-container" style="max-width: 700px;">
-      <div style="text-align: center; margin-bottom: 32px;">
-        <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--sn-gold); letter-spacing: 0.1em; display: block; margin-bottom: 8px;">
-          Sleep Diagnostic Tool
-        </span>
-        <h2 class="sn-serif" style="font-size: 28px; font-weight: bold; color: var(--sn-charcoal);">
-          Discover What Is Causing Their Nightly Blocks
-        </h2>
-        <p style="color: var(--sn-warm-grey); font-size: 14px; margin-top: 8px;">
-          Answer 3 quick questions to get instant clarity and recommended next actions steps.
-        </p>
+  <!-- Interactive Assessment Diagnostic Quiz Section -->
+  <span id="softnights-quiz-anchor-{{ section.id }}"></span>
+  <section class="quiz-section">
+    <div class="sn-container">
+      <div class="section-header">
+        <span class="section-subtitle" style="color: var(--color-gold);">PERSONAL ASSESSMENT</span>
+        <h2 class="sn-font-heading section-title">Sleep Pattern Diagnostician</h2>
+        <p class="section-desc">Take our custom 45-second assessment to instantly isolate the biological sleep block holding them back.</p>
       </div>
 
-      <!-- Quiz Interactive Card Container -->
-      <div id="sn-quiz-card" style="background-color: white; border-radius: 24px; padding: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid rgba(107, 142, 126, 0.15); min-height: 380px; display: flex; flex-direction: column; justify-content: space-between;">
-        <div id="quiz-question-container">
-          <!-- Step 1 Age question -->
-          <div class="quiz-step" data-step="0">
-            <h3 style="font-weight: 600; font-size: 18px; margin-bottom: 20px;">1. How old is your sweet little one?</h3>
-            <button class="quiz-option" data-val="newborn" data-key="age">
-              <strong>Newborn (0 - 3 Months)</strong>
-              <div style="font-size: 11px; color: var(--sn-warm-grey);">Navigating day/night confusion and initial rhythms</div>
-            </button>
-            <button class="quiz-option" data-val="infant" data-key="age">
-              <strong>Infant (4 - 11 Months)</strong>
-              <div style="font-size: 11px; color: var(--sn-warm-grey);">Dealing with the infamous sleep regressions</div>
-            </button>
-            <button class="quiz-option" data-val="toddler" data-key="age">
-              <strong>Toddler (1 - 2 Years)</strong>
-              <div style="font-size: 11px; color: var(--sn-warm-grey);">Bedtime protests, active minds, and crib battles</div>
-            </button>
-          </div>
-
-          <!-- Step 2 Challenge question (Initially hidden) -->
-          <div class="quiz-step" data-step="1" style="display: none;">
-            <h3 style="font-weight: 600; font-size: 18px; margin-bottom: 20px;">2. What is your biggest bedtime battle point?</h3>
-            <button class="quiz-option" data-val="stalling" data-key="challenge">
-              <strong>Vicious Bedtime Stall</strong>
-              <div style="font-size: 11px; color: var(--sn-warm-grey);">Taking 2+ hours with negotiations and protests</div>
-            </button>
-            <button class="quiz-option" data-val="waking" data-key="challenge">
-              <strong>Frequent Night Waking</strong>
-              <div style="font-size: 11px; color: var(--sn-warm-grey);">Waking up 3, 4, or 5+ times and requiring rocking or nursing</div>
-            </button>
-            <button class="quiz-option" data-val="early" data-key="challenge">
-              <strong>Impossible Early Waking</strong>
-              <div style="font-size: 11px; color: var(--sn-warm-grey);">Waking up for the day at 4:30 AM or 5:00 AM, exhausted</div>
-            </button>
-          </div>
-
-          <!-- Step 3 result placeholder (Initially hidden) -->
-          <div id="quiz-result-step" style="display: none; text-align: left;">
-            <div style="color: var(--sn-gold); font-size: 10px; font-weight: bold; text-transform: uppercase; margin-bottom: 8px;">Your Diagnostic Report</div>
-            <h3 id="result-title" class="sn-serif" style="font-size: 22px; font-weight: bold; margin-bottom: 8px; color: var(--sn-charcoal);">The Overtired Sleep Window Mismatch</h3>
-            <p id="result-desc" style="font-size: 13.5px; color: var(--sn-warm-grey); line-height: 1.6; margin-bottom: 16px;"></p>
-            
-            <div style="background-color: var(--sn-sage-light); padding: 16px; border-radius: 12px; border-left: 4px solid var(--sn-sage); margin-bottom: 24px;">
-              <span style="font-size: 11px; font-weight: bold; text-transform: uppercase; color: var(--sn-sage); display: block;">Suggested Immediate Action:</span>
-              <p id="result-reco" style="font-size: 12.5px; color: var(--sn-charcoal); margin-top: 4px; font-weight: 500;"></p>
+      <div class="quiz-box" id="quiz-wrapper-{{ section.id }}">
+        
+        <!-- Question state wrapper -->
+        <div id="quiz-question-box-{{ section.id }}">
+          
+          <div class="quiz-header">
+            <span class="quiz-step-title" id="quiz-step-indicator-{{ section.id }}">Step 1 of 3</span>
+            <div class="quiz-progress-track">
+              <div class="quiz-progress-bar" id="quiz-progress-inner-{{ section.id }}"></div>
             </div>
+          </div>
+
+          <h3 class="quiz-question" id="quiz-question-text-{{ section.id }}">
+            How old is your sweet little one?
+          </h3>
+
+          <div id="quiz-options-container-{{ section.id }}">
+            <!-- Dynamically injected option list -->
+          </div>
+
+        </div>
+
+        <!-- Result state wrapper (hidden initially) -->
+        <div class="quiz-results" id="quiz-result-box-{{ section.id }}">
+          
+          <div class="result-panel">
+            <span class="result-tag">Personalized Diagnostic Completed</span>
+            <h3 class="sn-font-heading result-title" id="quiz-res-title-{{ section.id }}">Fragmented Sleep Associations</h3>
             
-            <a href="#purchase-section" class="btn-gold" style="padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: bold; display: inline-block; text-align: center; width: 100%;">
-              Resolve this immediately with the complete Calm Sleep bundle
+            <p class="result-body" id="quiz-res-desc-{{ section.id }}">
+              Your child has linked falling asleep with external triggers (like feeding or rocking). Whenever they complete a light sleep cycle (every 45 minutes), they arouse slightly and call out for that exact system to be repeated.
+            </p>
+
+            <div class="reco-box">
+              <span class="reco-box-title">Tailored Guide Recommendation:</span>
+              <span id="quiz-res-reco-{{ section.id }}">
+                Our 'Gentle Lay-Down Setup' teaches how to slowly separate the sleep association from feeding without traumatic crying.
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <a href="#shopify-purchase-box-{{ section.id }}" class="btn-primary btn-quiz-cta">
+              Claim Library & Solutions Bundle
             </a>
-            
-            <button id="btn-reset-quiz" style="background: none; border: none; font-size: 11px; color: var(--sn-warm-grey); text-decoration: underline; margin-top: 16px; cursor: pointer; display: block; margin-left: auto; margin-right: auto;">
-              Restart Assessment
+            <button class="btn-quiz-reset" id="btn-reset-quiz-{{ section.id }}">
+              Restart Diagnostics Calculator
             </button>
           </div>
+
         </div>
+
       </div>
     </div>
   </section>
 
-  <!-- Pain Points Comparison Grid -->
-  <section class="sn-container" style="padding: 60px 24px;">
-    <div style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); display: grid; gap: 32px; margin-top: 40px;">
-      <div style="background-color: #FAF4F2; border-radius: 20px; padding: 24px; border: 1px solid rgba(230, 168, 161, 0.2);">
-        <h4 class="sn-serif" style="font-size: 20px; font-weight: bold; color: #b16c64; margin-bottom: 12px;">The Exhausted Bedtime Battle</h4>
-        <ul style="padding-left: 16px; margin: 0; font-size: 13.5px; color: var(--sn-warm-grey); display: flex; flex-direction: column; gap: 8px;">
-          <li>Taking 2+ hours bouncing, pacing, and rocking every single night.</li>
-          <li>Frequent wakings occurring every 45-90 minutes from sleep-props.</li>
-          <li>Extreme confusion and guilt over sleep training guidelines.</li>
-        </ul>
+  <!-- What is included detailed bundle items -->
+  <section style="background-color: #ffffff; padding: 80px 0; border-top: 1px solid rgba(90, 110, 99, 0.08); border-bottom: 1px solid rgba(90, 110, 99, 0.08);">
+    <div class="sn-container">
+      <div class="section-header" style="margin-bottom: 40px;">
+        <span class="section-subtitle">THE ANATOMY OF SLEEP</span>
+        <h2 class="sn-font-heading section-title">What is in the SoftNights Library?</h2>
+        <p class="section-desc">Everything you need to transform bedtime struggle into a peaceful family ritual. Instantly available to open and start seeing relief tonight.</p>
       </div>
 
-      <div style="background-color: var(--sn-sage-light); border-radius: 20px; padding: 24px; border: 1px solid rgba(107, 142, 126, 0.2);">
-        <h4 class="sn-serif" style="font-size: 20px; font-weight: bold; color: var(--sn-sage); margin-bottom: 12px;">The Calmer Bedtime Blueprint</h4>
-        <ul style="padding-left: 16px; margin: 0; font-size: 13.5px; color: var(--sn-warm-grey); display: flex; flex-direction: column; gap: 8px;">
-          <li>Peaceful drifting off in under 15 minutes without stress or drama.</li>
-          <li>Unbroken 5 to 7 hour initial stretches aligned to age-appropriate cycles.</li>
-          <li>Absolute confidence having a structured sleep roadmap built on love.</li>
-        </ul>
+      <div class="comparison-grid" style="gap: 20px;">
+        
+        <!-- Product Element 1 -->
+        <div class="comparison-card" style="padding: 24px; flex-direction: row; gap: 20px; align-items: center;">
+          <div class="book-mockup book-mockup-main" style="width: 70px; height: 95px; border-radius: 6px; box-shadow: 2px 4px 10px rgba(0,0,0,0.1); shrink-0: 0;">
+            <div class="book-spine-line"></div>
+            <div class="book-inner" style="padding: 10px;">
+              <span style="font-size: 4px; uppercase: 1; font-weight: bold;">CORE</span>
+              <span class="sn-font-heading" style="font-size: 5px; font-weight: bold; line-height: 1.1;">SoftNights Book</span>
+            </div>
+          </div>
+          <div>
+            <span class="uppercase font-bold" style="font-size: 9px; color: var(--color-sage); background: rgba(90,110,99,0.08); padding: 2px 8px; border-radius: 10px;">PART 1 & 2</span>
+            <h4 class="sn-font-heading" style="font-size: 15px; margin: 4px 0 6px 0;">Awake Windows & Melatonin Bridges Guide</h4>
+            <p class="text-xs" style="color: var(--color-warm-grey); margin: 0; line-height: 1.4;">The core schedule guidelines detailing exact wake limits by milestone week. Learn how to capture natural sleep cycles instantly.</p>
+          </div>
+        </div>
+
+        <!-- Product Element 2 -->
+        <div class="comparison-card" style="padding: 24px; flex-direction: row; gap: 20px; align-items: center;">
+          <div class="book-mockup book-mockup-bonus" style="width: 70px; height: 95px; border-radius: 6px; box-shadow: 2px 4px 10px rgba(0,0,0,0.1); margin-left: 0; transform: none; shrink-0: 0;">
+            <div class="book-spine-line"></div>
+            <div class="book-inner" style="padding: 10px;">
+              <span style="font-size: 4px; uppercase: 1; font-weight: bold; color: var(--color-gold);">BONUS</span>
+              <span class="sn-font-heading" style="font-size: 5px; font-weight: bold; line-height: 1.1;">Night Fix</span>
+            </div>
+          </div>
+          <div>
+            <span class="uppercase font-bold" style="font-size: 9px; color: var(--color-gold); background: rgba(217,158,108,0.1); padding: 2px 8px; border-radius: 10px;">FREE BUNDLE BONUS</span>
+            <h4 class="sn-font-heading" style="font-size: 15px; margin: 4px 0 6px 0;">The Night Waking Fix (eBook)</h4>
+            <p class="text-xs" style="color: var(--color-warm-grey); margin: 0; line-height: 1.4;">Our signature 2:00 AM reset map. Tells you exactly how to resettle your baby safely if they wake or refuse sleep.</p>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <!-- Complete bundle description -->
-  <section style="background-color: white; padding: 60px 24px; border-top: 1px solid rgba(107, 142, 126, 0.1);">
-    <div class="sn-container" style="text-align: center; max-width: 800px;">
-      <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--sn-sage); letter-spacing: 0.15em;">What Is Included</span>
-      <h2 class="sn-serif" style="font-size: 32px; font-weight: bold; margin-top: 8px; margin-bottom: 24px;">Complete Sleep Solutions Bundle</h2>
-      
-      <div style="text-align: left; background: var(--sn-cream); padding: 24px; border-radius: 20px; border: 1px solid rgba(107,142,126,0.1); margin-bottom: 32px;">
-        <h4 style="font-weight: 600; font-size: 15px; margin-bottom: 12px; color: var(--sn-sage); display: flex; align-items: center; gap: 8px;">
-          <span>✓</span> Part 1: The Main SoftNights Interactive Guide Book (eBook)
-        </h4>
-        <p style="font-size: 13px; color: var(--sn-warm-grey); margin-bottom: 16px; padding-left: 20px;">
-          Age-specific sleep milestones, scientific explanations behind night arousals, and actionable strategies for smooth transitions.
-        </p>
+  <!-- Dynamic Review Testimonial Blocks -->
+  <section class="testimonials-section">
+    <div class="sn-container">
+      <div class="section-header">
+        <span class="section-subtitle">REAL SUCCESSES</span>
+        <h2 class="sn-font-heading section-title">Relieved Parent Feedbacks</h2>
+      </div>
 
-        <h4 style="font-weight: 600; font-size: 15px; margin-bottom: 12px; color: var(--sn-sage); display: flex; align-items: center; gap: 8px;">
-          <span>✓</span> Part 2: The Age-Wise Awake Windows Calendars (PDF)
-        </h4>
-        <p style="font-size: 13px; color: var(--sn-warm-grey); margin-bottom: 16px; padding-left: 20px;">
-          Precisely mapped biological bedtime schedules for infants from 0 to 3+ years. Prevents dangerous cortisol-spikes.
-        </p>
-
-        <h4 style="font-weight: 600; font-size: 15px; margin-bottom: 12px; color: var(--sn-sage); display: flex; align-items: center; gap: 8px;">
-          <span>✓</span> Part 3: EXACT Bedtime Companion Audio Soundtrack (MP3)
-        </h4>
-        <p style="font-size: 13px; color: var(--sn-warm-grey); margin-bottom: 16px; padding-left: 20px;">
-          Mellow, ambient loops mixed at precise scientific hertz to soothe active brains into calm bedtime transitions.
-        </p>
-
-        <h4 style="font-weight: 600; font-size: 15px; margin-bottom: 12px; color: var(--sn-blush); display: flex; align-items: center; gap: 8px;">
-          <span>✓</span> BONUS: 'The Night Waking Fix' Companion Guide Book (eBook)
-        </h4>
-        <p style="font-size: 13px; color: var(--sn-warm-grey); padding-left: 20px;">
-          Our specific, signature system solving midnight wakings at 2:00 AM. Learn how to resettle them back to sleep safely.
-        </p>
+      <div class="testimonials-grid">
+        {% for block in section.blocks %}
+          {% if block.type == 'testimonial' %}
+            <div class="testimonial-card" {{ block.shopify_attributes }}>
+              <div>
+                <div class="stars-row">
+                  {% assign star_count = block.settings.stars | default: 5 %}
+                  {% for i in (1..star_count) %}
+                    <span class="star-yellow">★</span>
+                  {% endfor %}
+                </div>
+                <span class="testimonial-highlight">"{{ block.settings.pull_quote }}"</span>
+                <p class="testimonial-body">"{{ block.settings.quote }}"</p>
+              </div>
+              <div class="reviewer-info">
+                <div class="reviewer-name">{{ block.settings.author }}</div>
+                <div class="reviewer-detail">{{ block.settings.baby_age }}</div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
       </div>
     </div>
   </section>
 
   <!-- FAQ Accordion section -->
-  <section style="background-color: var(--sn-sage-light); padding: 60px 24px;">
+  <section class="faq-section">
     <div class="sn-container" style="max-width: 650px;">
-      <h3 class="sn-serif" style="text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 24px; color: var(--sn-charcoal);">
-        Frequently Asked Questions
-      </h3>
-
-      <div class="faq-item">
-        <button class="faq-trigger">
-          <span>Will I have to leave my child crying themselves to sleep?</span>
-          <span class="faq-icon">▼</span>
-        </button>
-        <div class="faq-content">
-          Absolutely not. The SoftNights methodology is strictly based on responsive, gentle sleep coaching. We provide detailed guidelines to help your child sleep happily without having to leave them alone crying.
-        </div>
+      
+      <div class="section-header">
+        <span class="section-subtitle">QUESTIONS SOLVED</span>
+        <h2 class="sn-font-heading section-title">Frequently Asked Questions</h2>
       </div>
 
-      <div class="faq-item">
-        <button class="faq-trigger">
-          <span>How fast should I expect noticeable results?</span>
-          <span class="faq-icon">▼</span>
-        </button>
-        <div class="faq-content">
-          Most parents who adjust their child's awake window bedtime patterns report seeing a beautiful transition and easier sleeping within 3 to 4 nights. Waking frequency reduces step-by-step over 7 to 10 nights.
-        </div>
+      <div class="faq-accordion">
+        {% for block in section.blocks %}
+          {% if block.type == 'faq' %}
+            <div class="faq-item" {{ block.shopify_attributes }}>
+              <button class="faq-button" onclick="toggleShopifyFaqElement(this)">
+                <span>{{ block.settings.question }}</span>
+                <span class="faq-icon">▼</span>
+              </button>
+              <div class="faq-content">
+                <div class="faq-inner-body">
+                  {{ block.settings.answer }}
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
       </div>
 
-      <div class="faq-item">
-        <button class="faq-trigger">
-          <span>Is there a guarantee?</span>
-          <span class="faq-icon">▼</span>
-        </button>
-        <div class="faq-content">
-          Yes! We offer a full 14-day absolute money-back satisfaction guarantee. If the guidelines in our sleep resource bundle do not bring calmer bedtime routines to your home, simply email us for a full refund.
-        </div>
-      </div>
     </div>
   </section>
 
-  <!-- Shopify Checkout conversion point -->
-  <section id="purchase-section" style="padding: 80px 24px; text-align: center; background-color: white;">
-    <div class="sn-container" style="max-width: 550px;">
-      <h2 class="sn-serif" style="font-size: 36px; font-weight: 700; color: var(--sn-charcoal); margin-bottom: 12px;">
-        Get your rest back tonight.
+  <!-- Shopify checkout checkout form box -->
+  <section class="closing-section" id="shopify-purchase-box-{{ section.id }}">
+    <div class="closing-bg-blob"></div>
+    <div class="closing-content">
+      
+      <div style="width: 48px; height: 48px; border-radius: 50%; background-color: var(--color-sage); color: #ffffff; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px auto;">
+        🌙
+      </div>
+
+      <h2 class="sn-font-heading" style="font-size: 32px; margin: 0 0 16px 0; color: var(--color-charcoal);">
+        {{ section.settings.footer_heading | default: 'Gift your family the relief of healthy, deep rest.' }}
       </h2>
-      <p style="color: var(--sn-warm-grey); font-size: 15px; margin-bottom: 32px;">
-        Purchase once, claim a gentle, step-wise system that guarantees peaceful, restorative bedtime routines.
+
+      <p style="font-size: 14px; color: var(--color-warm-grey); line-height: 1.6; margin: 0 0 35px 0;">
+        {{ section.settings.footer_subheading | default: 'Secure instant digital access today and start sleep training with confidence. Backed by an absolute money-back reassurance guarantee.' }}
       </p>
 
       {% comment %}
-        Configure this button block to integrate with native Shopify Card actions or checkout
+        High converting native action form
       {% endcomment %}
-      <form action="/cart/add" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="id" value="{{ section.settings.product_variant_id }}">
-        <button type="submit" class="btn-gold" style="width: 100%; border: none; padding: 18px; border-radius: 16px; font-size: 15px; font-weight: bold; cursor: pointer;">
-          {{ section.settings.cta_text }} — {{ section.settings.price_display }}
-        </button>
-      </form>
-
-      <div style="font-size: 11px; color: var(--sn-warm-grey); margin-top: 16px;">
-        🔒 Encrypted, secure transaction. Includes instant digital download.
+      <div style="max-width: 380px; margin: 0 auto;">
+        {% if section.settings.product_variant_id != blank %}
+          <form action="/cart/add" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="{{ section.settings.product_variant_id }}">
+            <input type="hidden" name="quantity" value="1">
+            <button type="submit" class="btn-primary" style="width: 100%; border: none;">
+              Get Rest Now — {{ section.settings.product_price | default: '₹299' }}
+            </button>
+          </form>
+        {% else %}
+          <a href="{{ section.settings.checkout_url | default: '/cart' }}" class="btn-primary" style="width: 100%;">
+            Get Rest Now — {{ section.settings.product_price | default: '₹299' }}
+          </a>
+        {% endif %}
+        
+        <div style="font-size: 11px; color: var(--color-warm-grey); margin-top: 14px; font-weight: 500;">
+          🔒 Fully encrypted transaction. Direct PDF, ZIP & MP3 Download email.
+        </div>
       </div>
+
     </div>
   </section>
 
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var sectionId = "{{ section.id }}";
-    var container = document.getElementById('shopify-section-' + sectionId);
+  // Dynamic Selector variables strictly aligned to section ID namespaces
+  (function() {
+    var sectId = "{{ section.id }}";
+    var container = document.getElementById("shopify-section-" + sectId);
     if (!container) return;
 
-    // FAQ Accordion functionality
-    var faqTriggers = container.querySelectorAll('.faq-trigger');
-    faqTriggers.forEach(function(trigger) {
-      trigger.addEventListener('click', function() {
-        var item = trigger.closest('.faq-item');
-        var wasActive = item.classList.contains('active');
-        
-        container.querySelectorAll('.faq-item').forEach(function(fItem) {
-          fItem.classList.remove('active');
-        });
+    // Countdown clock state
+    var countdownEl = container.querySelector("#counter-clock-" + sectId);
+    if (countdownEl) {
+      var storeKey = "softnights_countdown_sect_" + sectId;
+      var savedTime = sessionStorage.getItem(storeKey);
+      var timeLeft = savedTime ? parseInt(savedTime, 10) : 14 * 60 + 58;
 
-        if (!wasActive) {
-          item.classList.add('active');
+      var timerId = setInterval(function() {
+        if (timeLeft <= 0) {
+          timeLeft = 14 * 60 + 58;
+        } else {
+          timeLeft--;
         }
-      });
-    });
+        sessionStorage.setItem(storeKey, timeLeft);
 
-    // Quiz Navigation Logic
-    var quizAnswers = {};
-    var currentStepIdx = 0;
-    var quizSteps = container.querySelectorAll('.quiz-step');
-    var resultStep = container.getElementById('quiz-result-step');
-    var resultTitle = container.getElementById('result-title');
-    var resultDesc = container.getElementById('result-desc');
-    var resultReco = container.getElementById('result-reco');
+        var mins = Math.floor(timeLeft / 60);
+        var secs = timeLeft % 60;
+        countdownEl.innerText = mins + "m " + (secs < 10 ? "0" : "") + secs + "s";
+      }, 1000);
+    }
 
-    var quizRecommendations = {
-      waking: {
-        title: "The Fragmented Sleep Association Cycle",
-        desc: "Your child has linked falling asleep with external triggers (like feeding or rocking). Whenever they complete a light sleep cycle (every 45 minutes), they arouse slightly and call out for that exact system to be repeated.",
-        reco: "Our 'Gentle Lay-Down Setup' in Section 3 of the Sleep Solutions Guide specifically teaches how to slowly separate the sleep association from feeding without traumatic crying."
+    // Interactive sleep pattern assessment data
+    var questionsList = [
+      {
+        id: "age",
+        question: "How old is your sweet little one?",
+        options: [
+          { label: "Newborn (0 - 3 Months)", val: "newborn", desc: "Navigating day/night biological rhythms" },
+          { label: "Infant (4 - 11 Months)", val: "infant", desc: "Isolating sleep regression milestone blocks" },
+          { label: "Toddler (1 - 2 Years)", val: "toddler", desc: "Active crib protests and setting bedtime boundaries" }
+        ]
       },
-      stalling: {
+      {
+        id: "challenge",
+        question: "What is your biggest bedtime struggle point?",
+        options: [
+          { label: "Endless Stalling Battle", val: "stalling", desc: "Takes over 2 hours with constant kisses or water demands" },
+          { label: "Hourly Midnight Wakings", val: "waking", desc: "Waking frequently needing rocking or milk to fall back" },
+          { label: "Unpredictable 5:00 AM Wakings", val: "early", desc: "Waking up extremely early of the day completely drained" }
+        ]
+      }
+    ];
+
+    var quizState = {
+      curIdx: 0,
+      answers: {}
+    };
+
+    var outputBox = container.querySelector("#quiz-result-box-" + sectId);
+    var questionBox = container.querySelector("#quiz-question-box-" + sectId);
+    var progressInner = container.querySelector("#quiz-progress-inner-{{ section.id }}");
+    var stepIndicator = container.querySelector("#quiz-step-indicator-{{ section.id }}");
+    var qHeading = container.querySelector("#quiz-question-text-{{ section.id }}");
+    var optionsContainer = container.querySelector("#quiz-options-container-{{ section.id }}");
+
+    // Diagnostic recommendations lookups
+    var lookupDiagnostics = {
+      "stalling": {
         title: "The Overtired Sleep Window Mismatch",
-        desc: "The '2-hour bedtime struggle' is actually a physiological response: if kids miss their biological sleep window, their brains produce a surge of cortisol (stress hormone) and adrenaline, giving them a 'second wind' that mimics energetic resistance.",
-        reco: "By shifting the bedtime by just 15 minutes and using the 4-step 'Silent Transition' visual routing helper (featured in our routine builder), bedtime is cut down to under 20 minutes."
+        desc: " Bedtime battles are usually physiological: when children remain awake past their natural circadian window, their bodies trigger cortisol (alertness stress hormone) and adrenaline. This second wind makes bedtime negotiations last for hours.",
+        reco: "Shifting their evening routine forward by just 15 minutes and using the 'Silent Transition timeline' on Page 24 cuts bedtime down from 2 hours to 20 minutes effortlessly."
       },
-      early: {
-        title: "The Overtired Daylight Deficit",
-        desc: "Short daytime naps are draining their calming sleep pressure, leading to an over-stimulated state by evening. Bedtime becomes a struggle because their nervous system is in hyper-drive.",
-        reco: "The Sleep Solutions Guide introduces the 'Flexible Sleep Horizon System' which naturally extends naps, allowing your infant to sleep peacefully through the night."
+      "waking": {
+        title: "The Fragmented Sleep Association Cycle",
+        desc: "Your child has linked drifting asleep with external assistance (like pacifiers, rocking, or feeding). Because sleep cycles complete every 45-90 minutes, they arouse slightly and call out for that same trigger to re-enter sleep.",
+        reco: "Our responsive 'Gentle Lay-Down System' in Section 3 of the Sleep Solutions Guide teaches you how to dissolve sleep associations safely and lovingly without crying."
+      },
+      "early": {
+        title: "Daylight Circadian Deficit",
+        desc: "Early morning awakenings at 5:00 AM are caused by an accumulation of overtiredness during the previous afternoon, leading to a spike in morning cortisol production.",
+        reco: "Using Section 2's 'Flexible Sleep Horizon Schedule' stabilizes afternoon nap wake times, naturally expanding night sleeping until 7:00 AM."
       }
     };
 
-    container.querySelectorAll('.quiz-option').forEach(function(option) {
-      option.addEventListener('click', function() {
-        var key = option.getAttribute('data-key');
-        var val = option.getAttribute('data-val');
-        quizAnswers[key] = val;
+    function renderActiveQuestion() {
+      if (quizState.curIdx >= questionsList.length) {
+        showQuizResults();
+        return;
+      }
 
-        quizSteps[currentStepIdx].style.display = 'none';
-        currentStepIdx++;
+      var currentQ = questionsList[quizState.curIdx];
+      
+      // Update UI texts
+      if (qHeading) qHeading.innerText = currentQ.question;
+      if (stepIndicator) stepIndicator.innerText = "Step " + (quizState.curIdx + 1) + " of " + questionsList.length;
+      if (progressInner) progressInner.style.width = ((quizState.curIdx + 1) / questionsList.length * 100) + "%";
 
-        if (currentStepIdx < quizSteps.length) {
-          quizSteps[currentStepIdx].style.display = 'block';
-        } else {
-          // Show Result
-          var challenge = quizAnswers['challenge'] || 'waking';
-          var diagnostic = quizRecommendations[challenge] || quizRecommendations['waking'];
-          
-          resultTitle.innerText = diagnostic.title;
-          resultDesc.innerText = diagnostic.desc;
-          resultReco.innerText = diagnostic.reco;
+      if (optionsContainer) {
+        optionsContainer.innerHTML = "";
+        currentQ.options.forEach(function(opt) {
+          var btn = document.createElement("button");
+          btn.className = "quiz-option";
+          btn.type = "button";
+          btn.onclick = function() {
+            quizState.answers[currentQ.id] = opt.val;
+            quizState.curIdx++;
+            renderActiveQuestion();
+          };
 
-          resultStep.style.display = 'block';
-        }
-      });
+          var label = document.createElement("span");
+          label.className = "quiz-option-label";
+          label.innerText = opt.label;
+
+          var desc = document.createElement("span");
+          desc.className = "quiz-option-desc";
+          desc.innerText = opt.desc;
+
+          btn.appendChild(label);
+          btn.appendChild(desc);
+          optionsContainer.appendChild(btn);
+        });
+      }
+    }
+
+    function showQuizResults() {
+      if (questionBox) questionBox.style.display = "none";
+      if (outputBox) outputBox.style.display = "block";
+
+      var answerChallenge = quizState.answers["challenge"] || "stalling";
+      var report = lookupDiagnostics[answerChallenge] || lookupDiagnostics["stalling"];
+
+      var reportTitleEl = container.querySelector("#quiz-res-title-" + sectId);
+      var reportDescEl = container.querySelector("#quiz-res-desc-" + sectId);
+      var reportRecoEl = container.querySelector("#quiz-res-reco-" + sectId);
+
+      if (reportTitleEl) reportTitleEl.innerText = report.title;
+      if (reportDescEl) reportDescEl.innerText = report.desc;
+      if (reportRecoEl) reportRecoEl.innerText = report.reco;
+    }
+
+    var quizResetBtn = container.querySelector("#btn-reset-quiz-" + sectId);
+    if (quizResetBtn) {
+      quizResetBtn.onclick = function() {
+        quizState.curIdx = 0;
+        quizState.answers = {};
+        if (questionBox) questionBox.style.display = "block";
+        if (outputBox) outputBox.style.display = "none";
+        renderActiveQuestion();
+      };
+    }
+
+    // Initialize Quiz
+    renderActiveQuestion();
+  })();
+
+  // Accordion FAQ toggle scoped to element instances
+  function toggleShopifyFaqElement(button) {
+    var item = button.parentElement;
+    var content = button.nextElementSibling;
+    
+    var wasActive = item.classList.contains("active");
+    
+    // Close sibling accordion items
+    var siblings = item.parentElement.querySelectorAll(".faq-item");
+    siblings.forEach(function(sib) {
+      sib.classList.remove("active");
+      var sibContent = sib.querySelector(".faq-content");
+      if (sibContent) sibContent.style.maxHeight = null;
     });
 
-    var resetBtn = container.getElementById('btn-reset-quiz');
-    if (resetBtn) {
-      resetBtn.addEventListener('click', function() {
-        quizAnswers = {};
-        currentStepIdx = 0;
-        resultStep.style.display = 'none';
-        quizSteps[0].style.display = 'block';
-        quizSteps[1].style.display = 'none';
-      });
+    if (!wasActive) {
+      item.classList.add("active");
+      content.style.maxHeight = content.scrollHeight + "px";
+    } else {
+      item.classList.remove("active");
+      content.style.maxHeight = null;
     }
-  });
+  }
 </script>
 
 {% schema %}
 {
-  "name": "SoftNights Landing Section",
+  "name": "SoftNights Complete Page",
   "settings": [
     {
       "type": "header",
-      "content": "Announcement Bar"
+      "content": "Announcement Options"
     },
     {
       "type": "checkbox",
       "id": "show_announcement",
-      "label": "Show Announcement",
+      "label": "Show announcement warning",
       "default": true
     },
     {
       "type": "text",
       "id": "announcement_text",
-      "label": "Announcement Text",
+      "label": "Promo banner banner",
       "default": "Join 4,200+ Indian parents who reclaimed peaceful sleep this month"
     },
     {
       "type": "header",
-      "content": "Hero Settings"
+      "content": "Product Variant Options"
     },
     {
       "type": "text",
-      "id": "hero_badge",
-      "label": "Hero Badge Category",
-      "default": "SoftNights Sleep Preset"
+      "id": "product_price",
+      "label": "Store Price Value",
+      "default": "₹299"
     },
     {
       "type": "text",
-      "id": "hero_title",
-      "label": "Hero Main Heading",
-      "default": "Your Child Can Sleep. And So Can You."
+      "id": "product_variant_id",
+      "label": "Shopify Variant ID Override for Add-To-Cart",
+      "info": "Ex: 48920199182. If empty, falls back to the cart URL or fallback URL"
     },
     {
-      "type": "textarea",
-      "id": "hero_subtitle",
-      "label": "Hero Subtitle Line",
-      "default": "For parents who want calmer bedtimes and gentle, uninterrupted sleep for their little one. No aggressive methods, no endless crying."
+      "type": "url",
+      "id": "checkout_url",
+      "label": "Alternative Standard Checkout Button link",
+      "info": "Used if the above Product Variant ID field remains empty"
     },
     {
       "type": "text",
       "id": "header_cta_text",
-      "label": "Header CTA Text",
-      "default": "Buy Guide"
-    },
-    {
-      "type": "text",
-      "id": "cta_text",
-      "label": "Main CTA text",
-      "default": "Buy Complete Sleep Solutions Bundle"
-    },
-    {
-      "type": "text",
-      "id": "price_display",
-      "label": "Price Value Label",
-      "default": "₹299"
-    },
-    {
-      "type": "product_variant",
-      "id": "product_variant_id",
-      "label": "Product Variant for checkout purchase link"
+      "label": "Navigation Button text",
+      "default": "Order Rest"
     },
     {
       "type": "header",
-      "content": "Graphic Assets"
+      "content": "Copy Content Headings"
     },
     {
-      "type": "image_picker",
-      "id": "cover_main_image",
-      "label": "Main Book Cover Photo"
+      "type": "text",
+      "id": "trust_badge_text",
+      "label": "Seal Badge Title",
+      "default": "GENTLE BIOLOGICAL STUDY"
     },
     {
-      "type": "image_picker",
-      "id": "cover_bonus_image",
-      "label": "Bonus Book Cover Photo_Night_Waking"
+      "type": "text",
+      "id": "hero_heading",
+      "label": "Main Hero Headline",
+      "default": "Your Child Can Sleep. And So Can You."
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subheading",
+      "label": "Hero Subhead Line",
+      "default": "No traumatic rules or separation. A gentle, biologically-aligned routine tailored to your family dynamic."
+    },
+    {
+      "type": "text",
+      "id": "footer_heading",
+      "label": "Closing Call Title",
+      "default": "Gift your family the relief of healthy, deep rest."
+    },
+    {
+      "type": "textarea",
+      "id": "footer_subheading",
+      "label": "Closing Call Subtitle",
+      "default": "Secure instant digital access today and start sleep training with confidence. Backed by an absolute money-back reassurance guarantee."
+    },
+    {
+      "type": "header",
+      "content": "Branding Colors"
+    },
+    {
+      "type": "color",
+      "id": "color_cream",
+      "label": "Creamy soft bg surface",
+      "default": "#FAF7F2"
+    },
+    {
+      "type": "color",
+      "id": "color_sage",
+      "label": "Sage deep green",
+      "default": "#5A6E63"
+    },
+    {
+      "type": "color",
+      "id": "color_sage_light",
+      "label": "Sage transparent tint",
+      "default": "#FAF7F2"
+    },
+    {
+      "type": "color",
+      "id": "color_charcoal",
+      "label": "Slate charcoal heading text",
+      "default": "#2D3430"
+    },
+    {
+      "type": "color",
+      "id": "color_gold",
+      "label": "Warm accent color",
+      "default": "#D99E6C"
+    },
+    {
+      "type": "color",
+      "id": "color_blush",
+      "label": "Warning soft tint color",
+      "default": "#BA6B57"
+    },
+    {
+      "type": "color",
+      "id": "color_warm_grey",
+      "label": "Warm body description shade",
+      "default": "#606D66"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Parent Quote Reviews",
+      "settings": [
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Parent Name",
+          "default": "Priya & Rajesh Sharma"
+        },
+        {
+          "type": "text",
+          "id": "baby_age",
+          "label": "Child Age Descriptor",
+          "default": "Parents of Kabir (8 months)"
+        },
+        {
+          "type": "range",
+          "id": "stars",
+          "label": "Stars review Count",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "pull_quote",
+          "label": "Star Highlight Header",
+          "default": "From 2 hours of painful rocking to 15 minutes of peaceful yawning."
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Parent quote description",
+          "default": "We were taking over 2 hours every single evening to bounce our 8-month-old to sleep. Within 4 nights of using the Awake Windows calendar from Section 2, he was resting without a single tear. Absolute magic."
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "Accordion item FAQ",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Collapsible FAQ Title",
+          "default": "What age group is this system designed for?"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Collapsible FAQ body answer",
+          "default": "This library is divided into age-appropriate guidelines from newborns (0 to 12 weeks) up to independent preschoolers (up to 4 years old), specifically addressing the biological sleep regressions native to developmental milestones."
+        }
+      ]
     }
   ],
   "presets": [
     {
-      "name": "SoftNights Complete Landing",
-      "category": "Custom Landing Pages"
+      "name": "SoftNights Complete Page",
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "author": "Priya & Rajesh Sharma",
+            "baby_age": "Parents of Kabir (8 months)",
+            "stars": 5,
+            "pull_quote": "From 2 hours of painful rocking to 15 minutes of peaceful yawning.",
+            "quote": "We were taking over 2 hours every single evening to bounce our 8-month-old to sleep. Within 4 nights of using the Awake Windows calendar from Section 2, he was resting without a single tear. Absolute magic."
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "author": "Ananya & Rohan Mehra",
+            "baby_age": "Parents of Kiara (2.5 years)",
+            "stars": 5,
+            "pull_quote": "The gentle bedtime sequence turned negotiations into high-fives.",
+            "quote": "Kiara used to sleep stall for literal hours, claiming she heard monsters or needed multiple water cups. The bedtime roadmap from Section 3 gave her the secure framework she needed. Bedtime went from negotiation to high-fives."
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "author": "Neha Deshmukh",
+            "baby_age": "Mom of Aarav (6 months)",
+            "stars": 5,
+            "pull_quote": "Gentle sleep support that didn't break our bond.",
+            "quote": "I was deeply anxious about sleep coaching because I couldn't stomach hearing Kabir cry. This system showed us how to bridge awake cycles in simple steps. Absolutely life-changing."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "What age group is this system designed for?",
+            "answer": "This library is divided into age-appropriate guidelines from newborns (0 to 12 weeks) up to independent preschoolers (up to 4 years old), specifically addressing the biological sleep regressions native to developmental milestones."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Do I have to leave my child crying in their crib?",
+            "answer": "Absolutely not. The SoftNights methodology is strictly based on responsive, loving, gradual sleep coaching transitions. We provide detailed guidelines to help your child sleep happily without having to leave them alone crying."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Is there a guarantee?",
+            "answer": "Yes! We offer a full 14-day absolute money-back satisfaction guarantee. If the guidelines in this library do not bring calmer bedtime routines to your home, simply email page support for a full refund."
+          }
+        }
+      ]
     }
   ]
 }

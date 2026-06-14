@@ -4,10 +4,9 @@ import { Moon } from "lucide-react";
 
 interface HeaderProps {
   onCheckout: () => void;
-  onShopifyExport: () => void;
 }
 
-export default function Header({ onCheckout, onShopifyExport }: HeaderProps) {
+export default function Header({ onCheckout }: HeaderProps) {
   const scrollToId = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
@@ -50,17 +49,8 @@ export default function Header({ onCheckout, onShopifyExport }: HeaderProps) {
           </button>
         </nav>
 
-        {/* Purchase Trigger and Developer Exporter */}
+        {/* Purchase Trigger */}
         <div className="flex items-center gap-3">
-          <button
-            onClick={onShopifyExport}
-            className="bg-sage/10 hover:bg-sage/20 text-sage text-[10px] md:text-xs font-heading font-bold uppercase tracking-widest px-3 md:px-4 py-2 md:py-2.5 rounded-full border border-sage/15 hover:scale-[1.02] active:scale-[0.98] transition-transform flex items-center gap-1.5 cursor-pointer"
-            title="Convert and export this complete coding framework directly into Shopify Liquid theme template"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-sage animate-pulse"></span>
-            <span>Shopify Liquid</span>
-          </button>
-
           <button
             onClick={onCheckout}
             className="bg-gold hover:bg-gold/90 text-white text-[10px] md:text-xs font-heading font-bold uppercase tracking-widest px-3.5 md:px-5 py-2 md:py-2.5 rounded-full shadow-md hover:scale-[1.02] active:scale-[0.98] transition-transform flex items-center gap-1.5 cursor-pointer"

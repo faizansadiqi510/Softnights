@@ -225,7 +225,7 @@ export default function Quiz({ onOpenCheckout }: { onOpenCheckout: () => void })
                 className="w-full bg-gold hover:bg-gold/90 text-white font-heading font-semibold py-3.5 px-6 rounded-2xl shadow-lg transition-transform hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer text-sm md:text-base uppercase tracking-wider"
               >
                 <Moon className="w-4 h-4" />
-                <span>Resolve This Sleep Pattern — $17</span>
+                <span>Resolve This Sleep Pattern — ₹299</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
               <p className="text-center text-[10px] text-warm-grey">

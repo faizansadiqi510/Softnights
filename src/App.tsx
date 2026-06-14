@@ -13,16 +13,12 @@ import Testimonials from "./components/Testimonials";
 import FAQ from "./components/FAQ";
 import Footer from "./components/Footer";
 import FloatingCTA from "./components/FloatingCTA";
-import CheckoutModal from "./components/CheckoutModal";
-import ShopifyExporterModal from "./components/ShopifyExporterModal";
 import { Sparkles, Moon, ArrowRight, ShieldCheck, Heart } from "lucide-react";
 
 import coverMainDefault from "./assets/images/cover_main_1781463031571.jpg";
 import coverBonusDefault from "./assets/images/cover_bonus_1781463051771.jpg";
 
 export default function App() {
-  const [checkoutOpen, setCheckoutOpen] = useState(false);
-  const [shopifyExportOpen, setShopifyExportOpen] = useState(false);
   
   // Dynamic customizable store images (Main book, Night Waking bonus, Hero Illustration, Custom trust stamp/seal)
   const [images, setImages] = useState({
@@ -63,19 +59,7 @@ export default function App() {
   };
 
   const handleOpenCheckout = () => {
-    setCheckoutOpen(true);
-  };
-
-  const handleCloseCheckout = () => {
-    setCheckoutOpen(false);
-  };
-
-  const handleOpenShopifyExport = () => {
-    setShopifyExportOpen(true);
-  };
-
-  const handleCloseShopifyExport = () => {
-    setShopifyExportOpen(false);
+    window.open("https://superprofile.bio/vp/6a2ef256e5b8d70013ac3be1", "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -88,7 +72,7 @@ export default function App() {
       </div>
 
       {/* Header */}
-      <Header onCheckout={handleOpenCheckout} onShopifyExport={handleOpenShopifyExport} />
+      <Header onCheckout={handleOpenCheckout} />
 
       {/* Main Single Page Contents */}
       <main className="flex-grow">
@@ -181,12 +165,6 @@ export default function App() {
 
       {/* Scrolling / Floating dynamic bottom target CTA */}
       <FloatingCTA onOpenCheckout={handleOpenCheckout} />
-
-      {/* Safe interaction modal */}
-      <CheckoutModal isOpen={checkoutOpen} onClose={handleCloseCheckout} images={images} />
-
-      {/* Shopify Liquid Section Exporter Drawer/Modal */}
-      <ShopifyExporterModal isOpen={shopifyExportOpen} onClose={handleCloseShopifyExport} />
 
     </div>
   );
