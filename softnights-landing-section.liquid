@@ -1,0 +1,940 @@
+{% comment %}
+  SoftNights Sleep Solutions — Complete High-Converting Shopify Liquid Section
+  Custom built with Tailwind CSS, interactive Sleep Assessment Quiz, FAQs, and Testimonials.
+  
+  HOW TO USE:
+  1. In your Shopify Theme editor, go to Edit Code -> Sections -> Add a new section called "softnights-landing".
+  2. Paste the entire content of this file inside it.
+  3. Customize all text, colors, images, and prices directly in the Shopify Theme Customizer!
+  4. Ensure you enter your Shopify Product Variant ID in the Section Settings to enable instant checkout.
+{% endcomment %}
+
+<!-- Tailwind CSS and Fonts CDN (Optional toggle in settings) -->
+{% if section.settings.enable_tailwind_cdn %}
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+    
+    .softnights-container {
+      font-family: 'Inter', sans-serif;
+    }
+    .softnights-font-serif {
+      font-family: 'Playfair Display', serif;
+    }
+    .softnights-font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+{% endif %}
+
+<style>
+  :root {
+    --color-sage: {{ section.settings.color_sage }};
+    --color-sage-light: {{ section.settings.color_sage_light }};
+    --color-cream: {{ section.settings.color_cream }};
+    --color-charcoal: {{ section.settings.color_charcoal }};
+    --color-gold: {{ section.settings.color_gold }};
+    --color-blush: {{ section.settings.color_blush }};
+    --color-warm-grey: {{ section.settings.color_warm_grey }};
+  }
+
+  .bg-sage-custom { background-color: var(--color-sage); }
+  .text-sage-custom { color: var(--color-sage); }
+  .border-sage-custom { border-color: var(--color-sage); }
+  
+  .bg-cream-custom { background-color: var(--color-cream); }
+  .text-charcoal-custom { color: var(--color-charcoal); }
+  .border-cream-custom { border-color: var(--color-cream); }
+  
+  .bg-gold-custom { background-color: var(--color-gold); }
+  .text-gold-custom { color: var(--color-gold); }
+  
+  .bg-blush-custom { background-color: var(--color-blush); }
+  .text-blush-custom { color: var(--color-blush); }
+
+  .hover-scale-subtle:hover {
+    transform: scale(1.01);
+  }
+</style>
+
+<div class="softnights-container bg-cream-custom text-charcoal-custom antialiased selection:bg-sage-custom/20 selection:text-charcoal-custom overflow-x-hidden">
+  
+  <!-- 1. TOP BANNER REASSURANCE -->
+  {% if section.settings.show_top_banner %}
+    <div class="bg-sage-custom text-white text-[11px] font-semibold text-center py-2 px-4 uppercase tracking-widest flex items-center justify-center gap-1.5 select-none shrink-0">
+      <svg class="w-3.5 h-3.5 text-gold-custom" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM14 11a1 1 0 011 1v1h1a1 1 0 110 2h-1v1a1 1 0 11-2 0v-1h-1a1 1 0 110-2h1v-1a1 1 0 011-1z"></path>
+      </svg>
+      <span>{{ section.settings.top_banner_text }}</span>
+    </div>
+  {% endif %}
+
+  <!-- 2. HEADER -->
+  <header class="bg-sage-custom/95 py-4 px-6 md:px-12 flex justify-between items-center z-50 shadow-sm border-b border-white/5 select-none sticky top-0 backdrop-blur">
+    <div class="flex items-center gap-2">
+      {% if section.settings.logo_image %}
+        <img src="{{ section.settings.logo_image | image_url: width: 150 }}" alt="Logo" class="h-8 object-contain">
+      {% else %}
+        <div class="flex items-center gap-1.5">
+          <div class="w-6 h-6 bg-gold-custom rounded-full flex items-center justify-center">
+            <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.38 5.38 0 11-7.54-7.54A9.016 9.016 0 0012 3z"></path></svg>
+          </div>
+          <span class="text-white text-lg font-bold tracking-tight">SoftNights</span>
+        </div>
+      {% endif %}
+    </div>
+    
+    <div class="flex items-center gap-4">
+      <a href="#sleep-assessment-quiz-section" class="hidden md:inline-block text-xs font-semibold text-white/90 hover:text-white transition-colors">
+        Take Assessment
+      </a>
+      <a href="{{ section.settings.checkout_url | default: '/cart' }}" onclick="softnightsAddToCart(event)" class="bg-gold-custom hover:bg-gold-custom/90 text-white text-xs font-bold py-2.5 px-4 rounded-xl transition-all shadow-md flex items-center gap-1">
+        <span>Order Guide</span>
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- 3. HERO SECTION -->
+  <section class="max-w-6xl mx-auto py-12 md:py-20 px-6 grid md:grid-cols-2 gap-12 items-center">
+    <div class="space-y-6 md:space-y-8 animate-fade-in text-left">
+      <!-- Trust Stamp and Star Badges -->
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="bg-sage-custom/10 text-sage-custom text-[11px] font-bold py-1 px-3 rounded-full uppercase tracking-wider">
+          {{ section.settings.trust_badge_text }}
+        </span>
+        <div class="flex items-center gap-1">
+          {% for i in (1..5) %}
+            <svg class="w-4 h-4 text-gold-custom" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+          {% endfor %}
+          <span class="text-xs text-warm-grey-custom font-semibold ml-1">4.9/5 Parental Rating</span>
+        </div>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="text-4xl md:text-6xl font-serif font-bold text-charcoal-custom tracking-tight leading-tight">
+        {{ section.settings.hero_heading }}
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="text-base md:text-lg text-warm-grey-custom leading-relaxed">
+        {{ section.settings.hero_subheading }}
+      </p>
+
+      <!-- Proof points -->
+      <ul class="space-y-3.5 text-sm">
+        <li class="flex items-center gap-2.5">
+          <svg class="w-5 h-5 text-sage-custom" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+          </svg>
+          <span>100% Gentle, loving adjustments — <strong>absolutely zero raw crying-it-out.</strong></span>
+        </li>
+        <li class="flex items-center gap-2.5">
+          <svg class="w-5 h-5 text-sage-custom" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+          </svg>
+          <span>Instantly optimized awake-windows to stop bedtime stalling.</span>
+        </li>
+      </ul>
+
+      <!-- CTA and Countdown Area -->
+      <div class="space-y-4">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <a href="{{ section.settings.checkout_url | default: '/cart' }}" onclick="softnightsAddToCart(event)" class="bg-gold-custom hover:bg-gold-custom/90 text-white font-bold py-4 px-8 rounded-2xl shadow-xl transition-all hover-scale-subtle text-center flex items-center justify-center gap-2 uppercase tracking-wide text-sm">
+            <span>Get the Library — {{ section.settings.product_price }}</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </a>
+          <a href="#sleep-assessment-quiz-section" class="border border-sage-custom/30 hover:bg-sage-custom/5 text-sage-custom font-bold py-4 px-6 rounded-2xl tracking-wide text-sm transition-all text-center">
+            Diagnostics Assessment
+          </a>
+        </div>
+
+        <!-- Real-time countdown timer -->
+        <div class="bg-blush-custom/5 border border-blush-custom/20 rounded-xl p-3.5 flex items-center justify-between max-w-md">
+          <div class="flex items-center gap-2 text-xs font-semibold text-blush-custom">
+            <svg class="w-4 h-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span>OFFER ENDING SOON</span>
+          </div>
+          <span id="softnights-hero-timer" class="softnights-font-mono text-xs font-bold text-blush-custom">14m 58s</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visual Book Mockups Grid and Trust Sign -->
+    <div class="flex flex-col items-center gap-6">
+      <div class="relative flex items-center justify-center gap-4 py-8">
+        <!-- Main Book Cover Mockup -->
+        <div class="relative aspect-[3/4] w-40 sm:w-48 md:w-56 rounded-2xl p-5 flex flex-col justify-between shadow-2xl border border-white/10 transition-transform duration-300 hover:rotate-2 hover:scale-[1.03] select-none text-left bg-sage-custom overflow-hidden text-white">
+          <div class="absolute top-0 left-0 bottom-0 w-2.5 bg-gradient-to-r from-white/20 to-transparent"></div>
+          <div class="absolute top-0 left-2.5 bottom-0 w-[1px] bg-black/10"></div>
+          <div class="space-y-1.5 md:space-y-2">
+            <span class="text-[7.5px] md:text-[8px] tracking-widest font-bold text-white/50 uppercase block">CORE PROGRAM BUNDLE</span>
+            <h4 class="softnights-font-serif font-bold text-sm md:text-base leading-tight mt-1 text-white">SoftNights Sleep Solutions</h4>
+            <div class="w-6 h-[1.5px] bg-gold-custom block rounded"></div>
+          </div>
+          <p class="text-[9px] md:text-xs text-white/80 leading-relaxed font-sans">The complete guide (from raw evening fights to 15-minute peaceful yawns).</p>
+          <span class="text-[7.5px] font-mono font-semibold text-white/50 tracking-wider uppercase block">Softnights Press ©</span>
+        </div>
+
+        <!-- Bonus Book Cover Mockup -->
+        <div class="relative aspect-[3/4] w-36 sm:w-40 md:w-48 rounded-2xl p-4 flex flex-col justify-between shadow-xl border border-white/10 transition-transform duration-300 hover:-rotate-2 hover:scale-[1.03] select-none text-left bg-gradient-to-br from-gray-800 to-gray-900 overflow-hidden text-white -ml-8 mt-12">
+          <div class="absolute top-0 left-0 bottom-0 w-2 bg-gradient-to-r from-white/10 to-transparent"></div>
+          <div class="space-y-1.5">
+            <span class="text-[7px] tracking-widest font-bold text-gold-custom uppercase block">FREE BUNDLED BONUS</span>
+            <h4 class="softnights-font-serif font-bold text-xs md:text-sm leading-tight text-white">The Night Waking Fix</h4>
+            <div class="w-4 h-[1.5px] bg-white/20 block rounded"></div>
+          </div>
+          <p class="text-[8.5px] md:text-[10px] text-white/70 leading-relaxed">Exactly what to do when your child wakes up at 2:00 AM and refuses to resettle.</p>
+          <span class="text-[7px] font-mono font-semibold text-white/40 tracking-wider uppercase block">FAST ACTION SHEET</span>
+        </div>
+      </div>
+
+      <p class="text-[10.5px] text-warm-grey-custom italic">
+        ✨ Hover guides to view details. Secure both guides today for only {{ section.settings.product_price }}.
+      </p>
+    </div>
+  </section>
+
+  <!-- 4. PAIN POINTS SECTION -->
+  <section class="bg-sage-custom/5 py-16 md:py-20 px-6">
+    <div class="max-w-4xl mx-auto space-y-12">
+      <div class="text-center space-y-3">
+        <span class="text-[11px] font-bold text-sage-custom uppercase tracking-wider">RELATABLE REALITY</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-charcoal-custom text-sage-custom font-heading">
+          {{ section.settings.pain_heading }}
+        </h2>
+        <p class="text-sm md:text-base text-warm-grey-custom max-w-xl mx-auto">
+          {{ section.settings.pain_subheading }}
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- Exhausting Loop -->
+        <div class="bg-white p-6 md:p-8 rounded-3xl border border-blush-custom/20 shadow-sm relative overflow-hidden flex flex-col justify-between">
+          <div class="absolute top-0 right-0 w-24 h-24 bg-blush-custom/5 rounded-full blur-xl"></div>
+          <div>
+            <div class="w-10 h-10 bg-blush-custom/10 text-blush-custom rounded-xl flex items-center justify-center mb-5">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </div>
+            <h3 class="font-bold text-lg text-charcoal-custom mb-4 font-heading">The Bedtime Battle Loop</h3>
+            <ul class="space-y-3.5 text-xs text-warm-grey-custom">
+              <li class="flex items-start gap-2.5">
+                <span class="text-blush-custom font-bold mt-0.5">✕</span>
+                <span><strong>The 2-Hour Stall:</strong> Endless negotiations, demands for cups of water, and 'one more kiss' delays.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="text-blush-custom font-bold mt-0.5">✕</span>
+                <span><strong>Hourly Wakings:</strong> Bouncing, rocking, or feeding back to sleep 4+ times a night.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="text-blush-custom font-bold mt-0.5">✕</span>
+                <span><strong>Waking Up Defeated:</strong> Starting your days at 5:00 AM completely drained and emotionally raw.</span>
+              </li>
+            </ul>
+          </div>
+          <div class="mt-8 pt-4 border-t border-sage-custom/10">
+            <span class="italic text-xs text-blush-custom font-sans">“I was sitting on the nursery floor at 3:00 AM sobbing, wondering why my baby wouldn't just close his eyes.”</span>
+          </div>
+        </div>
+
+        <!-- Soothing Sleep Flow -->
+        <div class="bg-white p-6 md:p-8 rounded-3xl border border-sage-custom/20 shadow-sm relative overflow-hidden flex flex-col justify-between">
+          <div class="absolute top-0 right-0 w-24 h-24 bg-sage-custom/5 rounded-full blur-xl"></div>
+          <div>
+            <div class="w-10 h-10 bg-sage-custom/10 text-sage-custom rounded-xl flex items-center justify-center mb-5">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <h3 class="font-bold text-lg text-charcoal-custom mb-4 font-heading">The Soothing Sleep Flow</h3>
+            <ul class="space-y-3.5 text-xs text-warm-grey-custom">
+              <li class="flex items-start gap-2.5">
+                <span class="text-sage-custom font-bold mt-0.5">✓</span>
+                <span><strong>Peaceful 15-Min Drifting:</strong> Your child enters their natural sleep window relaxed and ready.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="text-sage-custom font-bold mt-0.5">✓</span>
+                <span><strong>Uninterrupted Rest:</strong> Sleeping through multiple transitions with gentle, built-in self-soothing skills.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="text-sage-custom font-bold mt-0.5">✓</span>
+                <span><strong>Waking Up Joyful:</strong> Greeted at 7:00 AM by a laughing, alert child who got the rest they need.</span>
+              </li>
+            </ul>
+          </div>
+          <div class="mt-8 pt-4 border-t border-sage-custom/10">
+            <span class="italic text-xs text-sage-custom font-sans">“We put him down awake, kissed him goodnight, and walked out. Under 10 minutes later he was sleeping peacefully. No tears.”</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. INTERACTIVE 45-SECOND ASSESSMENT (QUIZ) -->
+  <section id="sleep-assessment-quiz-section" class="py-16 px-6 relative overflow-hidden">
+    <div class="absolute top-1/2 left-0 w-80 h-80 bg-sage-custom/5 rounded-full blur-3xl pointer-events-none -translate-x-1/2 -translate-y-1/2"></div>
+    <div class="max-w-4xl mx-auto space-y-10">
+      <div class="text-center space-y-3">
+        <span class="text-[11px] font-bold text-gold-custom uppercase tracking-wider">PERSONALIZED PERSPECTIVE</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-charcoal-custom">Sleep Pattern Diagnostician</h2>
+        <p class="text-sm md:text-base text-warm-grey-custom max-w-xl mx-auto">
+          Is it a developmental leap? A sleep association? Or cortisol window delay? Take our custom 45-second assessment to instantly understand their nightly patterns.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-3xl p-6 md:p-10 shadow-xl border border-sage-custom/10 max-w-2xl mx-auto ring-1 ring-sage-custom/5">
+        
+        <!-- Quiz Window: Question State -->
+        <div id="softnights-quiz-question-box" class="space-y-8">
+          <div class="flex items-center justify-between border-b border-sage-custom/10 pb-4">
+            <span id="softnights-quiz-progress-text" class="text-xs font-semibold text-sage-custom uppercase tracking-wider">Step 1 of 3</span>
+            <div class="w-24 bg-sage-custom/15 h-1.5 rounded-full overflow-hidden">
+              <div id="softnights-quiz-progress-bar" class="bg-sage-custom h-full transition-all duration-300" style="width: 33%"></div>
+            </div>
+          </div>
+
+          <h3 id="softnights-quiz-headline" class="text-xl md:text-2xl font-bold text-charcoal-custom font-heading leading-snug">
+            How old is your sweet little one?
+          </h3>
+
+          <div id="softnights-quiz-options-container" class="grid gap-3">
+            <!-- Dynamically populated via Javascript -->
+          </div>
+        </div>
+
+        <!-- Quiz Window: Result State (Hidden by default) -->
+        <div id="softnights-quiz-result-box" class="hidden space-y-8 animate-fade-in">
+          <div class="bg-sage-custom/5 border border-sage-custom/15 rounded-3xl p-6 md:p-8 space-y-6 text-left relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-sage-custom/5 rounded-full blur-2xl"></div>
+            
+            <div class="flex items-center gap-2 text-sage-custom">
+              <svg class="w-5 h-5 text-gold-custom" fill="currentColor" viewBox="0 0 20 20"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM14 11a1 1 0 011 1v1h1a1 1 0 110 2h-1v1a1 1 0 11-2 0v-1h-1a1 1 0 110-2h1v-1a1 1 0 011-1z"></path></svg>
+              <span class="text-xs font-bold tracking-wider uppercase">Personalized Diagnostic Completed</span>
+            </div>
+
+            <div class="space-y-2">
+              <span id="softnights-quiz-result-syndrome" class="text-xs font-mono font-bold text-blush-custom uppercase block tracking-wider">The Fragmented Sleep Association Cycle</span>
+              <h4 id="softnights-quiz-result-title" class="text-2xl font-bold text-charcoal-custom font-heading leading-tight">Fragile sleep transition spikes</h4>
+            </div>
+
+            <p id="softnights-quiz-result-desc" class="text-sm text-warm-grey-custom leading-relaxed">
+              Your child has linked falling asleep with external triggers (like feeding or rocking). Whenever they complete a light sleep cycle (every 45 minutes), they arouse slightly and call out for that exact system to be repeated.
+            </p>
+
+            <div class="bg-white/80 p-5 rounded-2xl border border-sage-custom/10 text-xs text-warm-grey-custom leading-relaxed relative z-10 flex gap-3.5 items-start">
+              <div class="w-8 h-8 rounded-full bg-gold-custom/10 text-gold-custom flex items-center justify-center shrink-0">💡</div>
+              <div>
+                <strong class="font-bold text-charcoal-custom block mb-0.5">Tailored Guide Recommendation:</strong>
+                <span id="softnights-quiz-result-rec">Our 'Gentle Lay-Down Setup' teaches how to slow separate the sleep association from feeding without traumatic crying.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-center gap-3.5 pt-2">
+            <a href="{{ section.settings.checkout_url | default: '/cart' }}" onclick="softnightsAddToCart(event)" class="w-full sm:flex-1 bg-gold-custom hover:bg-gold-custom/90 text-white font-bold py-4 px-8 rounded-2xl shadow-xl transition-all hover-scale-subtle text-center flex items-center justify-center gap-2 uppercase tracking-wide text-sm">
+              <span>Grab Library & Solutions</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </a>
+            <button onclick="resetSoftnightsQuiz()" class="text-xs font-semibold text-warm-grey-custom hover:text-charcoal-custom transition-colors flex items-center gap-1.5 py-3">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 12H19M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span>Restart Diagnostic</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. WHAT IS INCLUDED SECTION -->
+  <section class="bg-cream-custom py-16 md:py-20 px-6 border-t border-b border-sage-custom/10">
+    <div class="max-w-4xl mx-auto space-y-12">
+      <div class="text-center space-y-3">
+        <span class="text-[11px] font-bold text-gold-custom uppercase tracking-wider">THE ANATOMY OF SLEEP</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-charcoal-custom font-heading">The Softnights Sleep Library</h2>
+        <p class="text-sm md:text-base text-warm-grey-custom max-w-xl mx-auto">
+          Everything you need to transform bedtime from a stressful battle to a nurturing family ritual. Download, open, and start seeing relief tonight.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8 pt-4">
+        <!-- Main Component -->
+        <div class="bg-white p-6 md:p-8 rounded-3xl border border-sage-custom/10 hover:border-sage-custom/25 transition-all flex flex-col md:flex-row gap-6">
+          <div class="relative aspect-[3/4] p-3 flex flex-col justify-between w-20 rounded-xl shadow-md border border-white/5 text-left shrink-0 self-center md:self-auto bg-sage-custom overflow-hidden text-white h-28">
+            <span class="text-[5px] tracking-wider text-white/50 uppercase font-mono block">EBOOK</span>
+            <h5 class="font-bold text-[8px] leading-tight text-white/95 mt-0.5 line-clamp-2">SoftNights Sleep Solutions</h5>
+            <span class="text-[5px] font-mono text-white/40 block">SOFTNIGHTS</span>
+          </div>
+          <div class="space-y-2">
+            <span class="bg-sage-custom/10 text-sage-custom text-[9px] font-bold py-0.5 px-2.5 rounded-full uppercase">CORE GUIDE</span>
+            <h3 class="font-bold text-base text-charcoal-custom font-heading">Section 1 & 2: Awake Windows & Melatonin Bridges</h3>
+            <p class="text-xs text-warm-grey-custom leading-relaxed">The cornerstone system details exact awake tolerances by week, showing how to leverage melatonin production before cortisol triggers.</p>
+          </div>
+        </div>
+
+        <!-- Bonus Component -->
+        <div class="bg-white p-6 md:p-8 rounded-3xl border border-sage-custom/10 hover:border-sage-custom/25 transition-all flex flex-col md:flex-row gap-6">
+          <div class="relative aspect-[3/4] p-3 flex flex-col justify-between w-20 rounded-xl shadow-md border border-white/5 text-left shrink-0 self-center md:self-auto bg-gray-900 overflow-hidden text-white h-28">
+            <span class="text-[5px] tracking-wider text-white/50 uppercase font-mono block">BONUS GUIDE</span>
+            <h5 class="font-bold text-[8px] leading-tight text-white/95 mt-0.5 line-clamp-2">The Night Waking Fix</h5>
+            <span class="text-[5px] font-mono text-white/40 block">SOFTNIGHTS</span>
+          </div>
+          <div class="space-y-2">
+            <span class="bg-gold-custom/15 text-gold-custom text-[9px] font-bold py-0.5 px-2.5 rounded-full uppercase">FREE BONUS</span>
+            <h3 class="font-bold text-base text-charcoal-custom font-heading">Section 3: The 2:00 AM Reset Plan</h3>
+            <p class="text-xs text-warm-grey-custom leading-relaxed">A tactical cheat sheet to reduce long nighttime settling periods from a full hour down to 10 restful minutes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. TESTIMONIALS SECTION -->
+  <section class="py-16 md:py-20 px-6 bg-sage-custom/5">
+    <div class="max-w-4xl mx-auto space-y-12">
+      <div class="text-center space-y-3">
+        <span class="text-[11px] font-bold text-sage-custom uppercase tracking-wider">REAL RECOVERIES</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-charcoal-custom font-heading">Relieved Parent Feedbacks</h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        {% for block in section.blocks %}
+          {% if block.type == 'testimonial' %}
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-sage-custom/5 flex flex-col justify-between" {{ block.shopify_attributes }}>
+              <div class="space-y-4">
+                <div class="flex items-center gap-1">
+                  {% for i in (1..block.settings.stars) %}
+                    <svg class="w-3.5 h-3.5 text-gold-custom" fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                  {% endfor %}
+                </div>
+                <p class="text-xs text-warm-grey-custom leading-relaxed italic">"{{ block.settings.quote }}"</p>
+                <p class="text-xs text-sage-custom font-semibold">"{{ block.settings.pull_quote }}"</p>
+              </div>
+              <div class="pt-4 border-t border-sage-custom/10 mt-6 md:mt-8">
+                <div class="text-xs font-bold text-charcoal-custom">{{ block.settings.author }}</div>
+                <div class="text-[10px] text-warm-grey-custom font-semibold">{{ block.settings.baby_age }}</div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. FAQS SECTION -->
+  <section class="max-w-3xl mx-auto py-16 md:py-20 px-6">
+    <div class="text-center space-y-3 mb-10">
+      <span class="text-[11px] font-bold text-gold-custom uppercase tracking-wider">ACCURATE ASSURANCES</span>
+      <h2 class="text-3xl md:text-4xl font-bold text-charcoal-custom font-heading">Frequently Asked Questions</h2>
+    </div>
+
+    <div class="space-y-3.5">
+      {% for block in section.blocks %}
+        {% if block.type == 'faq' %}
+          <div class="bg-white rounded-2xl border border-sage-custom/10 overflow-hidden shadow-sm" {{ block.shopify_attributes }}>
+            <button onclick="toggleSoftnightsFaq(this)" class="w-full text-left py-4 px-6 flex justify-between items-center bg-white hover:bg-sage-custom/5 transition-colors focus:outline-none">
+              <span class="text-xs sm:text-sm font-bold text-charcoal-custom leading-snug">{{ block.settings.question }}</span>
+              <svg class="w-4 h-4 text-warm-grey-custom transition-transform duration-300 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-white">
+              <div class="p-6 border-t border-sage-custom/10 text-xs sm:text-sm text-warm-grey-custom leading-relaxed whitespace-pre-line">
+                {{ block.settings.answer }}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- 9. FINAL CLOSING INSPIRATIONAL CTA -->
+  <section class="bg-sage-custom/10 py-16 md:py-24 px-6 text-center relative overflow-hidden">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+    <div class="max-w-2xl mx-auto space-y-8 relative z-10">
+      <div class="w-12 h-12 bg-sage-custom text-white rounded-full flex items-center justify-center mx-auto shadow-md">
+        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.38 5.38 0 11-7.54-7.54A9.016 9.016 0 0012 3z"></path></svg>
+      </div>
+      <div class="space-y-4">
+        <h2 class="text-3xl md:text-5xl font-serif font-bold text-charcoal-custom tracking-tight leading-tight">
+          {{ section.settings.footer_heading }}
+        </h2>
+        <p class="text-xs sm:text-sm text-warm-grey-custom leading-relaxed max-w-lg mx-auto">
+          {{ section.settings.footer_subheading }}
+        </p>
+      </div>
+
+      <div class="max-w-xs mx-auto">
+        <a href="{{ section.settings.checkout_url | default: '/cart' }}" onclick="softnightsAddToCart(event)" class="w-full bg-gold-custom hover:bg-gold-custom/90 text-white font-bold py-4 px-8 rounded-2xl shadow-xl transition-all hover-scale-subtle text-center flex items-center justify-center gap-2 uppercase tracking-wide text-sm">
+          <span>Secure Rest Now — {{ section.settings.product_price }}</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // 1. Interactive assessment Quiz Logic
+  var softnightsQuizQuestions = [
+    {
+      id: "age",
+      question: "How old is your sweet little one?",
+      options: [
+        { label: "Newborn (0 - 3 Months)", value: "newborn", description: "Navigating day/night confusion and initial patterns" },
+        { label: "Infant (4 - 11 Months)", value: "infant", description: "Dealing with the infamous sleep regressions" },
+        { label: "Toddler (1 - 2 Years)", value: "toddler", description: "Bedtime protests, active minds, and standing in the crib" },
+        { label: "Preschooler (3+ Years)", value: "preschool", description: "Stalling, requesting 'one more glass of water', and fears" }
+      ]
+    },
+    {
+      id: "biggest_challenge",
+      question: "What is your biggest bedtime battle point?",
+      options: [
+        { label: "Vicious Bedtime Stall", value: "stalling", description: "Taking 2+ hours with endless negotiations and bedtime protests" },
+        { label: "Frequent Night Waking", value: "waking", description: "Waking up 3, 4, or 5+ times and requiring rocking or nursing to resettle" },
+        { label: "Extremely Short Naps", value: "naps", description: "Struggling to nap longer than 30 minutes, keeping them cranky" },
+        { label: "Impossible Early Waking", value: "early", description: "Waking up for the day at 4:30 AM or 5:00 AM, exhausted" }
+      ]
+    },
+    {
+      id: "settling_method",
+      question: "How does your child currently fall asleep?",
+      options: [
+        { label: "Nursing, feeding, or eating to sleep", value: "feed", description: "Requires milk to drift off every single time" },
+        { label: "Physical motion: Rocking, bouncing, or patting", value: "rock", description: "Loves physical movement to trigger deep drowsiness" },
+        { label: "Co-sleeping or lying right next to you", value: "cosleep", description: "Cannot stay in their own mattress without a parent present" },
+        { label: "Independently, but takes a highly variable time", value: "independent", description: "Capable of self-soothing but struggles in certain shifts" }
+      ]
+    }
+  ];
+
+  var softnightsQuizState = {
+    currentIdx: 0,
+    answers: {}
+  };
+
+  function renderSoftnightsQuizQuestion() {
+    var questionEl = document.getElementById("softnights-quiz-headline");
+    var containerEl = document.getElementById("softnights-quiz-options-container");
+    var progressText = document.getElementById("softnights-quiz-progress-text");
+    var progressBar = document.getElementById("softnights-quiz-progress-bar");
+    
+    if (!questionEl || !containerEl) return;
+    
+    var currentQ = softnightsQuizQuestions[softnightsQuizState.currentIdx];
+    questionEl.innerText = currentQ.question;
+    progressText.innerText = "Step " + (softnightsQuizState.currentIdx + 1) + " of 3";
+    progressBar.style.width = ((softnightsQuizState.currentIdx + 1) / 3 * 100) + "%";
+
+    containerEl.innerHTML = "";
+    currentQ.options.forEach(function(opt) {
+      var btn = document.createElement("button");
+      btn.className = "w-full text-left p-4.5 rounded-2xl bg-cream-custom/20 hover:bg-sage-custom/10 border border-sage-custom/10 hover:border-sage-custom/25 transition-all outline-none focus:outline-none flex flex-col gap-0.5 cursor-pointer text-charcoal-custom";
+      btn.onclick = function() {
+        selectSoftnightsAnswer(currentQ.id, opt.value);
+      };
+
+      var labelSpan = document.createElement("span");
+      labelSpan.className = "text-xs sm:text-sm font-bold block";
+      labelSpan.innerText = opt.label;
+
+      var descSpan = document.createElement("span");
+      descSpan.className = "text-[10px] text-warm-grey-custom font-normal leading-normal";
+      descSpan.innerText = opt.description;
+
+      btn.appendChild(labelSpan);
+      btn.appendChild(descSpan);
+      containerEl.appendChild(btn);
+    });
+  }
+
+  function selectSoftnightsAnswer(questionId, value) {
+    softnightsQuizState.answers[questionId] = value;
+    if (softnightsQuizState.currentIdx < softnightsQuizQuestions.length - 1) {
+      softnightsQuizState.currentIdx++;
+      renderSoftnightsQuizQuestion();
+    } else {
+      showSoftnightsQuizResult();
+    }
+  }
+
+  function showSoftnightsQuizResult() {
+    var questionBox = document.getElementById("softnights-quiz-question-box");
+    var resultBox = document.getElementById("softnights-quiz-result-box");
+    if (!questionBox || !resultBox) return;
+
+    var challenge = softnightsQuizState.answers["biggest_challenge"];
+    var age = softnightsQuizState.answers["age"];
+
+    var resultTitle = "The Fragmented Sleep Association Cycle";
+    var resultSyndrome = "Fragile sleep transition spikes";
+    var resultDesc = "Your child has linked falling asleep with external triggers (like feeding or rocking). Whenever they complete a light sleep cycle (every 45 minutes), they arouse slightly and call out for that exact system to be repeated.";
+    var resultRec = "Our 'Gentle Lay-Down Setup' in Section 3 of the Sleep Solutions Guide specifically teaches how to slowly separate the sleep association from feeding without traumatic crying.";
+
+    if (challenge === "stalling") {
+      resultTitle = "The Overtired Sleep Window Mismatch";
+      resultSyndrome = "Melatonin-cortisol battlefront";
+      resultDesc = "The '2-hour bedtime struggle' is actually a physiological response: if kids miss their biological sleep window, their brains produce a surge of cortisol (stress hormone) and adrenaline, giving them a 'second wind' that mimics energetic resistance.";
+      resultRec = "By shifting the bedtime by just 15 minutes and using the 4-step 'Silent Transition' visual routing helper (featured in our routine builder), bedtime is cut down to under 20 minutes.";
+    } else if (age === "toddler" || age === "preschool") {
+      resultTitle = "The Boundary Exploration Paradox";
+      resultSyndrome = "Toddler independence testing";
+      resultDesc = "Toddlers require strict cognitive predictability to feel secure enough to let go of waking life. Protests and requests are their way of checking if boundaries are rigid. Liquid or floating schedules breed bedtime anxiety.";
+      resultRec = "Building a highly visual bedtime timeline (and using the Toddler Bedtime Agreement on Page 42) stops stalling in its tracks.";
+    } else if (challenge === "naps" || challenge === "early") {
+      resultTitle = "The Overtired Daylight Deficit";
+      resultSyndrome = "Disrupted circadian balance";
+      resultDesc = "Short daytime naps are draining their calming sleep pressure, leading to an over-stimulated state by evening. Bedtime becomes a struggle because their nervous system is in hyper-drive.";
+      resultRec = "The Sleep Solutions Guide introduces the 'Flexible Sleep Horizon System' which naturally extends naps, allowing your infant to sleep peacefully through the night.";
+    }
+
+    document.getElementById("softnights-quiz-result-title").innerText = resultTitle;
+    document.getElementById("softnights-quiz-result-syndrome").innerText = resultSyndrome;
+    document.getElementById("softnights-quiz-result-desc").innerText = resultDesc;
+    document.getElementById("softnights-quiz-result-rec").innerText = resultRec;
+
+    questionBox.classList.add("hidden");
+    resultBox.classList.remove("hidden");
+  }
+
+  function resetSoftnightsQuiz() {
+    softnightsQuizState.currentIdx = 0;
+    softnightsQuizState.answers = {};
+    document.getElementById("softnights-quiz-question-box").classList.remove("hidden");
+    document.getElementById("softnights-quiz-result-box").classList.add("hidden");
+    renderSoftnightsQuizQuestion();
+  }
+
+  // 2. Countdown Timer
+  function initSoftnightsTimer() {
+    var element = document.getElementById("softnights-hero-timer");
+    if (!element) return;
+    
+    var savedTime = sessionStorage.getItem("softnights_countdown_shopify");
+    var timeLeft = savedTime ? parseInt(savedTime, 10) : 14 * 60 + 58;
+
+    var timer = setInterval(function() {
+      if (timeLeft <= 0) {
+        timeLeft = 14 * 60 + 58;
+      } else {
+        timeLeft--;
+      }
+      sessionStorage.setItem("softnights_countdown_shopify", timeLeft);
+      
+      var mins = Math.floor(timeLeft / 60);
+      var secs = timeLeft % 60;
+      var timeStr = mins + "m " + (secs < 10 ? "0" : "") + secs + "s";
+      element.innerText = timeStr;
+    }, 1000);
+  }
+
+  // 3. Toggle FAQ Accordion
+  function toggleSoftnightsFaq(button) {
+    var content = button.nextElementSibling;
+    var icon = button.querySelector("svg");
+    
+    // Close other FAQs
+    var allFaqs = button.parentElement.parentElement.children;
+    for (var i = 0; i < allFaqs.length; i++) {
+       var otherBtn = allFaqs[i].firstElementChild;
+       var otherContent = otherBtn.nextElementSibling;
+       var otherIcon = otherBtn.querySelector("svg");
+       if (otherBtn !== button) {
+         otherContent.style.maxHeight = null;
+         otherIcon.classList.remove("rotate-180");
+       }
+    }
+
+    if (content.style.maxHeight) {
+      content.style.maxHeight = null;
+      icon.classList.remove("rotate-180");
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+      icon.classList.add("rotate-180");
+    }
+  }
+
+  // 4. Cart / Add to Cart Action
+  function softnightsAddToCart(event) {
+    var variantId = "{{ section.settings.product_variant_id }}";
+    if (variantId && variantId !== "") {
+      event.preventDefault();
+      // Redirect to Shopify checkout or AJAX add-to-cart
+      window.location.href = "/cart/add?id=" + variantId + "&quantity=1" + "&return_to=/checkout";
+    }
+  }
+
+  // Hook everything on window load or DOM loaded
+  document.addEventListener("DOMContentLoaded", function() {
+    renderSoftnightsQuizQuestion();
+    initSoftnightsTimer();
+  });
+</script>
+
+{% schema %}
+{
+  "name": "SoftNights Landing",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Theme Optimization Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_tailwind_cdn",
+      "label": "Enable Tailwind CSS via CDN",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_top_banner",
+      "label": "Show top announcement banner",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "top_banner_text",
+      "label": "Banner Promo Text",
+      "default": "Join 4,200+ Indian parents who reclaimed peaceful sleep this month"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Custom logo image (fallback is text)"
+    },
+    {
+      "type": "header",
+      "content": "Product Options & Price Tags"
+    },
+    {
+      "type": "text",
+      "id": "product_price",
+      "label": "Offer Price Text",
+      "default": "₹299"
+    },
+    {
+      "type": "text",
+      "id": "product_variant_id",
+      "label": "Shopify Product Variant ID (for automatic purchase)",
+      "info": "Leave blank to use default Shopify checkout page"
+    },
+    {
+      "type": "url",
+      "id": "checkout_url",
+      "label": "Alternative Checkout Link (if Variant ID is empty)",
+      "default": "/cart"
+    },
+    {
+      "type": "header",
+      "content": "Color Palette"
+    },
+    {
+      "type": "color",
+      "id": "color_sage",
+      "label": "Sage green tint",
+      "default": "#5A6E63"
+    },
+    {
+      "type": "color",
+      "id": "color_sage_light",
+      "label": "Sage light tint background",
+      "default": "#C1D3CA"
+    },
+    {
+      "type": "color",
+      "id": "color_cream",
+      "label": "Creamy soft background",
+      "default": "#FAF7F2"
+    },
+    {
+      "type": "color",
+      "id": "color_charcoal",
+      "label": "Slate charcoal bold headings",
+      "default": "#2D3430"
+    },
+    {
+      "type": "color",
+      "id": "color_gold",
+      "label": "Golden yellow accents",
+      "default": "#D99E6C"
+    },
+    {
+      "type": "color",
+      "id": "color_blush",
+      "label": "Blush warning indicators",
+      "default": "#BA6B57"
+    },
+    {
+      "type": "color",
+      "id": "color_warm_grey",
+      "label": "Warm grey descriptions",
+      "default": "#606D66"
+    },
+    {
+      "type": "header",
+      "content": "Hero Copy"
+    },
+    {
+      "type": "text",
+      "id": "trust_badge_text",
+      "label": "Trust Badge Text",
+      "default": "THE RAJASTHAN GENTLE METHOD"
+    },
+    {
+      "type": "text",
+      "id": "hero_heading",
+      "label": "Hero Headline",
+      "default": "Your Child Can Sleep. And So Can You."
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subheading",
+      "label": "Hero Subhead",
+      "default": "No traumatic crying or strict rules. Just a gentle, biologically-aligned routine tailored to your family's dynamic."
+    },
+    {
+      "type": "header",
+      "content": "Emotional Pain Points"
+    },
+    {
+      "type": "text",
+      "id": "pain_heading",
+      "label": "Section Headline",
+      "default": "Does bedtime feel like an endless negotiation?"
+    },
+    {
+      "type": "textarea",
+      "id": "pain_subheading",
+      "label": "Section Subhead",
+      "default": "You count the hours, dreading the sunset. By the time they finally drift off, you are too depleted to connect, relax, or simply breathe."
+    },
+    {
+      "type": "header",
+      "content": "Footer Reassurance"
+    },
+    {
+      "type": "text",
+      "id": "footer_heading",
+      "label": "Footer Closing Headline",
+      "default": "Gift your family the relief of healthy, deep rest tonight."
+    },
+    {
+      "type": "textarea",
+      "id": "footer_subheading",
+      "label": "Footer Closing Subhead",
+      "default": "No subscription. No upsells. No physical clutter. For just the price of a single bedtime takeout meal, claim a gentle system that lasts a lifetime."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Relieved Parent Quote",
+      "settings": [
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Parent Name",
+          "default": "Priya & Rajesh Sharma"
+        },
+        {
+          "type": "text",
+          "id": "baby_age",
+          "label": "Child's Age Descriptor",
+          "default": "Parents of Kabir (8 months)"
+        },
+        {
+          "type": "range",
+          "id": "stars",
+          "label": "Star Rating Count",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "pull_quote",
+          "label": "Pull Quote",
+          "default": "From 2 hours of painful rocking to 15 minutes of peaceful yawning."
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Full Quote Narrative",
+          "default": "We were taking over 2 hours every single evening to bounce our 8-month-old to sleep. Within 4 nights of using the Awake Windows calendar from Section 2, he was resting without a single tear. Absolute magic."
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "Product Accordion FAQ",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "FAQ Question",
+          "default": "What age group is this system designed for?"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "FAQ Answer Description",
+          "default": "This library is divided into age-appropriate guidelines from newborns (0 to 12 weeks) up to independent preschoolers (up to 4 years old), specifically addressing the biological sleep regressions native to developmental milestones."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SoftNights Landing",
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "author": "Priya & Rajesh Sharma",
+            "baby_age": "Parents of Kabir (8 months)",
+            "stars": 5,
+            "pull_quote": "From 2 hours of painful rocking to 15 minutes of peaceful yawning.",
+            "quote": "We were taking over 2 hours every single evening to bounce our 8-month-old to sleep. Within 4 nights of using the Awake Windows calendar from Section 2, he was resting without a single tear. Absolute magic."
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "author": "Ananya & Rohan Mehra",
+            "baby_age": "Parents of Kiara (2.5 years)",
+            "stars": 5,
+            "pull_quote": "The gentle bedtime sequence turned negotiations into high-fives.",
+            "quote": "Kiara used to sleep stall for literal hours, claiming she heard monsters or needed multiple water cups. The bedtime visual roadmap from Section 3 gave her the secure framework she needed. Sleep time went from negotiation to handshakes."
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "author": "Neha Deshmukh",
+            "baby_age": "Mom of Aarav (6 months)",
+            "stars": 5,
+            "pull_quote": "Gentle sleep support that didn't break our maternal bond.",
+            "quote": "I was deeply anxious about sleep training because I could never stomach hearing my baby cry. This system showed us how to bridge asleep state via awake intervals. Highly effective."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "What age group is this system designed for?",
+            "answer": "This library is divided into age-appropriate guidelines from newborns (0 to 12 weeks) up to independent preschoolers (up to 4 years old), specifically addressing the biological sleep regressions native to developmental milestones."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "How soon can we expect to see sleeping results?",
+            "answer": "While every child's temperament differs slightly, parents implementing the Awake Window Adjustments and the Gentle Settling sequences usually see a noticeable ease in bedtime stalling within 3 to 4 nights. Midnight waking frequency reduces step-by-step over 7 to 10 nights."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

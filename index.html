@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sleep Solutions — Calmer nights for your family</title>
+    <script>
+      // Safety script to prevent uncaught TypeError: Cannot set property fetch of #<Window> which has only a getter
+      // This is common in secure iframe/sandbox environments with third-party polyfills (like formdata-polyfill).
+      (function() {
+        try {
+          var originalFetch = window.fetch;
+          var currentFetch = originalFetch;
+          Object.defineProperty(window, 'fetch', {
+            get: function() {
+              return currentFetch;
+            },
+            set: function(val) {
+              currentFetch = val;
+            },
+            configurable: true,
+            enumerable: true
+          });
+        } catch (e1) {
+          try {
+            var originalGlobalFetch = globalThis.fetch;
+            var currentGlobalFetch = originalGlobalFetch;
+            Object.defineProperty(globalThis, 'fetch', {
+              get: function() {
+                return currentGlobalFetch;
+              },
+              set: function(val) {
+                currentGlobalFetch = val;
+              },
+              configurable: true,
+              enumerable: true
+            });
+          } catch (e2) {
+            // Fallback: If both fail, let's pre-emptively define global or globalThis.fetch getter/setters on standard descriptors
+            try {
+              if (typeof global !== 'undefined') {
+                Object.defineProperty(global, 'fetch', {
+                  get: function() { return originalFetch; },
+                  set: function() {},
+                  configurable: true
+                });
+              }
+            } catch (e3) {}
+          }
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

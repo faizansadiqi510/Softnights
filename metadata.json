@@ -1,0 +1,6 @@
+{
+  "name": "Softnights",
+  "description": "An elegant, deeply comforting landing page for Softnights selling premium parenting sleep guides at ₹299, customized with real-time image uploaders.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
